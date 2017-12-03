@@ -26,6 +26,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// If this file is called directly, abort.
+if (!defined('WPINC')) {
+	die;
+}
+
 if (!class_exists('PostponePosts')) {
 
 	/**
@@ -37,12 +42,22 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
+		private static final OPTION_DAYS = 'postpone_posts_days';
+		private static final OPTION_DAYS_DEFAULT = 1;
+
 		/**
 		 * Activation: sets up option of postpone days in database.
 		 */
 		public static function activation() {
+
 			// if postpone days do not exist in options database
-			// create field and set number of days to 1
+			if (!get_option(OPTION_DAYS)) {
+
+				// create field and set number of days to 1
+				add_option(OPTION_DAYS, OPTION_DAYS_DEFAULT);
+
+			}
+
 		}
 
 		/**
@@ -56,8 +71,15 @@ if (!class_exists('PostponePosts')) {
 		 * Uninstall: remove option of postpone days in database.
 		 */
 		public static function activation() {
+
 			// if postpone days exist in options database
-			// remove field
+			if (get_option(OPTION_DAYS)) {
+
+				// remove field
+				delete_option(OPTION_DAYS);
+
+			}
+
 		}
 
 	}

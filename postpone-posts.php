@@ -42,8 +42,8 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
-		private static final OPTION_DAYS = 'postpone_posts_days';
-		private static final OPTION_DAYS_DEFAULT = 1;
+		private static final $OPTION_DAYS = 'postpone_posts_days';
+		private static final $OPTION_DAYS_DEFAULT = 1;
 
 		/**
 		 * Activation: sets up option of postpone days in database.
@@ -51,10 +51,10 @@ if (!class_exists('PostponePosts')) {
 		public static function activation() {
 
 			// if postpone days do not exist in options database
-			if (!get_option(OPTION_DAYS)) {
+			if (!get_option($OPTION_DAYS)) {
 
 				// create field and set number of days to 1
-				add_option(OPTION_DAYS, OPTION_DAYS_DEFAULT);
+				add_option($OPTION_DAYS, $OPTION_DAYS_DEFAULT);
 
 			}
 
@@ -73,10 +73,10 @@ if (!class_exists('PostponePosts')) {
 		public static function activation() {
 
 			// if postpone days exist in options database
-			if (get_option(OPTION_DAYS)) {
+			if (get_option($OPTION_DAYS)) {
 
 				// remove field
-				delete_option(OPTION_DAYS);
+				delete_option($OPTION_DAYS);
 
 			}
 

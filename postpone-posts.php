@@ -26,34 +26,47 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- * Activation: sets up option of postpone days in database.
- */
-function popo_activation() {
-	// if postpone days do not exist in options database
-	// create field and set number of days to 1
+if (!class_exists('PostponePosts')) {
+
+	/**
+	 * Class containing all plugin code.
+	 *
+	 * The class contains only static functions, as no instances are needed.
+	 * This is just an encapsulation to easily avoid name collisions as is recommended in
+	 * https://developer.wordpress.org/plugins/the-basics/best-practices/
+	 */
+	class PostponePosts {
+
+		/**
+		 * Activation: sets up option of postpone days in database.
+		 */
+		public static function activation() {
+			// if postpone days do not exist in options database
+			// create field and set number of days to 1
+		}
+
+		/**
+		 * Deactivation: nothing to do at the moment.
+		 */
+		public static function deactivation() {
+			// pass
+		}
+
+		/**
+		 * Uninstall: remove option of postpone days in database.
+		 */
+		public static function activation() {
+			// if postpone days exist in options database
+			// remove field
+		}
+
+	}
+
+	// maintenance
+	register_activation_hook(__FILE__, 'PostponePosts::activation');
+	register_deactivation_hook(__FILE__, 'PostponePosts::deactivation');
+	register_uninstall_hook(__FILE__, 'PostponePosts::uninstall');
+
+} else {
+	// display error
 }
-
-// register activation routine
-register_activation_hook(__FILE__, 'popo_activation');
-
-/**
- * Deactivation: nothing to do at the moment.
- */
-function popo_deactivation() {
-	// pass
-}
-
-// register deactivation routine
-register_deactivation_hook(__FILE__, 'popo_deactivation');
-
-/**
- * Uninstall: remove option of postpone days in database.
- */
-function popo_activation() {
-	// if postpone days exist in options database
-	// remove field
-}
-
-// register uninstall routine
-register_uninstall_hook(__FILE__, 'popo_uninstall');

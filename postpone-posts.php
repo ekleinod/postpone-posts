@@ -141,9 +141,13 @@ if (!class_exists('PostponePosts')) {
 
 			} else {
 
+				global $plugin_page;
+
 				?>
 
-					<form method="get" id="postpone">
+					<form method="get">
+
+						<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 
 						<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.')) ?></p>
 
@@ -151,7 +155,7 @@ if (!class_exists('PostponePosts')) {
 
 						<p>
 							<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:')); ?></label>
-							<input type="number" id="postpone_posts_days" name="postpone_posts_days" min="1" value="<?php echo(get_option(self::OPTION_DAYS)) ?>" autofocus="autofocus" />
+							<input type="number" name="postpone_posts_days" min="1" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
 						</p>
 
 						<h2><?php echo(__('Affected posts (display only)')); ?></h2>
@@ -171,7 +175,7 @@ if (!class_exists('PostponePosts')) {
 							if (count($future_posts) < 1) {
 								$submit_args['disabled'] = 'disabled';
 							}
-							submit_button('Postpone Posts', 'primary large', 'submit', true, $submit_args);
+							submit_button('Postpone Posts', 'primary large', 'postpone', true, $submit_args);
 						?>
 
 					</form>

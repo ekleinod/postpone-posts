@@ -5,7 +5,7 @@ Tags: post, schedule
 Requires at least: 3.0.1
 Tested up to: 3.4
 Requires PHP: 5.2.4
-Stable tag: 1.0.0
+Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Either there are overlapping posts or you have to postpone (i.e. reschedule) all
 This is where *Postpone Posts* cones in handy.
 It takes all planned posts and postpones them by a selectable number of days.
 
-Postponing can only be done by an admin.
+Postponing can only be done by users with edit capabilities.
 
 **Important:** this plugin is created and tested for a one user installation of wordpress.
 Currently, there are no extensive safety measures for access rights etc.
@@ -40,13 +40,15 @@ Currently, there are no extensive safety measures for access rights etc.
 
 == Changelog ==
 
-= 1.0 =
+= 0.1.0 =
 
-* first stable version of the plugin
+* first version of the plugin
+* functionality
+* not tested against misuse concerning roles, capabilities etc.
 
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 0.1.0 =
 
 * first version, no upgrade possible

@@ -52,3 +52,20 @@ Currently, there are no extensive safety measures for access rights etc.
 = 0.1.0 =
 
 * first version, no upgrade possible
+
+
+== ToDo ==
+
+= User Experience =
+
+* option page for setting default postpone days
+* nicer preview postpone dates and posts in first dialog
+* interactive preview of postpone dates and posts in first dialog
+* localization
+
+= Hardening =
+
+* check for false input in days field
+* concept for rights for postponing
+	* can only users postpone their own posts?
+	* can admin postpone all posts?

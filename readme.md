@@ -4,8 +4,8 @@ This project contains all files for the postpone posts plugin for wordpress.
 
 See readme.txt in plugin directory for more information.
 
-- [plugin/readme.txt]
-- [changelog.md]
+- [readme.txt](plugin/readme.txt)
+- [changelog.md](changelog.md)
 
 All plugin files that are published as wordpress plugin reside in the folder "plugin".
 All development files reside in the folder "dev".
@@ -29,7 +29,7 @@ Additionally, the following branches my occur:
 
 ## License and Copyright
 
-- [plugin/gpl-3.0.txt]
+- [gpl-3.0.txt](plugin/gpl-3.0.txt)
 
 Postpone Posts is a wordpress plugin that postpones all future (planned) posts by a selectable number of days.
 Copyright (C) 2017 Ekkart Kleinod

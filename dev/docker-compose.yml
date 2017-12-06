@@ -24,7 +24,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
     volumes:
-      - "../plugin/postpone-posts/:/var/www/html/wp-content/plugins/postpone-posts"
+      - "../plugin/:/var/www/html/wp-content/plugins/postpone-posts"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

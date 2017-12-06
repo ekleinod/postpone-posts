@@ -51,9 +51,6 @@ if (!class_exists('PostponePosts')) {
 
 		const FIELD_DAYS = "days-postpone";
 
-		// this should be set in options or localization or such
-		const DATE_FORMAT = "Y-m-d";
-
 		/**
 		 * Activation: sets up option of postpone days in database.
 		 */
@@ -124,36 +121,57 @@ if (!class_exists('PostponePosts')) {
 			}
 
 			// get affected posts
-			$post_args = array(
+			$postArgs = array(
 					'post_status' => array('future'),
 					'numberposts' => -1,
 					'order' => 'ASC',
 			);
 
-			$future_posts = get_posts($post_args);
+			$futurePosts = get_posts($postArgs);
 
 			?>
 
 				<div class="wrap">
 				<h1><?= esc_html(get_admin_page_title()); ?></h1>
 
-			<?php
+				<?php
 
-			if (isset($_GET[self::ACTION_POSTPONE])) {
+				if ((count($futurePosts) > 0) && isset($_GET[self::FIELD_DAYS])) {
 
-				self::showActionPage($future_posts, $_GET[self::FIELD_DAYS]);
+					$popoDays = $_GET[self::FIELD_DAYS];
+					if (checkDays($popoDays)) {
 
-			} else if (isset($_GET[self::ACTION_PREVIEW])) {
+						// trigger actions depending on sending form
+						if (isset($_GET[self::ACTION_POSTPONE])) {
 
-				self::showPreviewPage($future_posts, $_GET[self::FIELD_DAYS]);
+							self::showActionPage($futurePosts, $_GET[self::FIELD_DAYS]);
 
-			} else {
+						} else if (isset($_GET[self::ACTION_PREVIEW])) {
 
-				self::showDaysInputPage($future_posts);
+							self::showPreviewPage($futurePosts, $_GET[self::FIELD_DAYS]);
 
-			}
+						} else {
 
-			?>
+							self::printError(__('Unrecognized action.'));
+							self::showDaysInputPage($futurePosts);
+
+						}
+
+					} else {
+
+							self::printError(__('Wrong number of days to postpone: %s.', $popoDays));
+							self::showDaysInputPage($futurePosts);
+
+					}
+
+				} else {
+
+					self::showDaysInputPage($futurePosts);
+
+				}
+
+
+				?>
 
 				</div>
 
@@ -189,9 +207,8 @@ if (!class_exists('PostponePosts')) {
 					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.')); ?>"><?php
 
 					foreach ($thePosts as $post) {
-						$postDate = new DateTime($post->post_date);
-						$postponedDate = self::getPostponedDate($postDate, get_option(self::OPTION_DAYS));
-						echo(sprintf("%s -> %s: \"%s\"\n", $postDate->format(self::DATE_FORMAT), $postponedDate->format(self::DATE_FORMAT), $post->post_title));
+						$postUpdate = getUpdatePost($post, get_option(self::OPTION_DAYS));
+						echo(sprintf("%s -> %s: \"%s\"\n", self::formatDateShort($post->post_date), self::formatDateShort($postUpdate->post_date), $post->post_title));
 					}
 
 					?></textarea>
@@ -199,7 +216,7 @@ if (!class_exists('PostponePosts')) {
 					<?php
 
 						$submit_args = array();
-						if (count($thePosts) < 1) {
+						if (count($thePosts) <= 0) {
 							$submit_args['disabled'] = 'disabled';
 						}
 						submit_button('Preview Postponing', 'primary large', self::ACTION_PREVIEW, true, $submit_args);
@@ -216,7 +233,7 @@ if (!class_exists('PostponePosts')) {
 		 * Preview page.
 		 *
 		 * @param thePosts posts to show
-		 * @param theDays days to postpone
+		 * @param theDays days to postpone (sanitized number > 0)
 		 */
 		private static function showPreviewPage($thePosts, $theDays) {
 
@@ -255,14 +272,14 @@ if (!class_exists('PostponePosts')) {
 							<?php
 
 								foreach ($thePosts as $post) {
-									$postDate = new DateTime($post->post_date);
-									$postponedDate = self::getPostponedDate($postDate, $theDays);
+
+									$postUpdate = getUpdatePost($post, $theDays);
 
 									?>
 
 										<tr>
-											<td><?php echo($postDate->format(self::DATE_FORMAT)); ?></td>
-											<td><?php echo($postponedDate->format(self::DATE_FORMAT)); ?></td>
+											<td><?php echo(self::formatDateShort($post->post_date)); ?></td>
+											<td><?php echo(self::formatDateShort($postUpdate->post_date)); ?></td>
 											<td><?php echo($post->post_title); ?></td>
 										</tr>
 
@@ -304,7 +321,7 @@ if (!class_exists('PostponePosts')) {
 		 * Action page (executes postponing).
 		 *
 		 * @param thePosts posts to show
-		 * @param theDays days to postpone
+		 * @param theDays days to postpone (sanitized number > 0)
 		 */
 		private static function showActionPage($thePosts, $theDays) {
 
@@ -315,16 +332,7 @@ if (!class_exists('PostponePosts')) {
 
 			foreach ($thePosts as $post) {
 
-				$postDate = new DateTime($post->post_date);
-				$postponedDate = self::getPostponedDate($postDate, $theDays);
-				$postGMTDate = new DateTime($post->post_date_gmt);
-				$postponedGMTDate = self::getPostponedDate($postGMTDate, $theDays);
-
-				$postUpdate = array(
-						'ID' => $post->id,
-						'post_date' => $postponedDate,
-						'post_date_gmt' => $postponedGMTDate,
-				);
+				$postUpdate = getUpdatePost($post, $theDays);
 
 				// debug
 				$postOriginal = array(
@@ -351,10 +359,10 @@ if (!class_exists('PostponePosts')) {
 				}
 
 				echo(sprintf("<li>Postponing from %s (GMT: %s) to %s (GMT: %s) for %s - %s</li>\n",
-						 $postDate->format(self::DATE_FORMAT),
-						 $postGMTDate->format(self::DATE_FORMAT),
-						 $postponedDate->format(self::DATE_FORMAT),
-						 $postponedGMTDate->format(self::DATE_FORMAT),
+						 self::formatDateShort($post->post_date),
+						 self::formatDateShort($post->post_date_gmt),
+						 self::formatDateShort($postUpdate->post_date),
+						 self::formatDateShort($postUpdate->post_date_gmt),
 						 $post->post_title,
 						 $message
 				));
@@ -368,10 +376,55 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
+		 * Check days input.
+		 *
+		 * @param theDays number of days to postpone
+		 *
+		 * @return correct input (true) or erroneous input (false)
+		 */
+		private static function checkDays($theDays) {
+
+			$success = true;
+
+			// check if input is a number
+			$success &= true;
+
+			// check if input is larger than 0
+			$success &= ($theDays > 0);
+
+			return $success;
+
+		}
+
+		/**
+		 * Compute array for postponed post.
+		 *
+		 * @param thePost original post
+		 * @param theDays number of days to postpone (sanitized number > 0)
+		 *
+		 * @return postponed post data
+		 */
+		private static function getUpdatePost($thePost, $theDays) {
+
+			$postDate = new DateTime($thePost->post_date);
+			$postponedDate = self::getPostponedDate($postDate, $theDays);
+
+			$postGMTDate = new DateTime($thePost->post_date_gmt);
+			$postponedGMTDate = self::getPostponedDate($postGMTDate, $theDays);
+
+			return array(
+					'ID' => $thePost->id,
+					'post_date' => $postponedDate->format(),
+					'post_date_gmt' => $postponedGMTDate->format(),
+			);
+
+		}
+
+		/**
 		 * Compute postponed date.
 		 *
 		 * @param theDate date to postpone
-		 * @param theDays number of days to postpone
+		 * @param theDays number of days to postpone (sanitized number > 0)
 		 *
 		 * @return postponed date
 		 */
@@ -379,6 +432,35 @@ if (!class_exists('PostponePosts')) {
 
 			$dteReturn = clone $theDate;
 			return $dteReturn->add(new DateInterval(sprintf('P%sD', $theDays)));
+
+		}
+
+		/**
+		 * Returns date in short format (for preview).
+		 *
+		 * Short format should be set in options or localization or such.
+		 *
+		 * @param theDate date (string representation)
+		 *
+		 * @return date in short strin representation
+		 */
+		private static function formatDateShort($theDate) {
+
+			$postDate = new DateTime($theDate);
+			return $postDate->format("Y-m-d");
+
+		}
+
+		/**
+		 * Print error message.
+		 *
+		 * Wrapper, because I don't know how to output errors in wp yet.
+		 *
+		 * @param theMessage message to print
+		 */
+		private static function printError($theMessage) {
+
+			echo(sprintf("<p>Error: %s.</p>\n", $theMessage));
 
 		}
 

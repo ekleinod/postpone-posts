@@ -139,7 +139,7 @@ if (!class_exists('PostponePosts')) {
 				if ((count($futurePosts) > 0) && isset($_GET[self::FIELD_DAYS])) {
 
 					$popoDays = $_GET[self::FIELD_DAYS];
-					if (checkDays($popoDays)) {
+					if (self::checkDays($popoDays)) {
 
 						// trigger actions depending on sending form
 						if (isset($_GET[self::ACTION_POSTPONE])) {
@@ -159,7 +159,7 @@ if (!class_exists('PostponePosts')) {
 
 					} else {
 
-							self::printError(__('Wrong number of days to postpone: %s.', $popoDays));
+							self::printError(sprintf(__('Wrong number of days to postpone: %s'), $popoDays));
 							self::showDaysInputPage($futurePosts);
 
 					}
@@ -207,8 +207,8 @@ if (!class_exists('PostponePosts')) {
 					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.')); ?>"><?php
 
 					foreach ($thePosts as $post) {
-						$postUpdate = getUpdatePost($post, get_option(self::OPTION_DAYS));
-						echo(sprintf("%s -> %s: \"%s\"\n", self::formatDateShort($post->post_date), self::formatDateShort($postUpdate->post_date), $post->post_title));
+						$postUpdate = self::getUpdatePost($post, get_option(self::OPTION_DAYS));
+						echo(sprintf("%s -> %s: \"%s\"\n", self::formatDateShort($post->post_date), self::formatDateShort($postUpdate['post_date']), $post->post_title));
 					}
 
 					?></textarea>
@@ -273,13 +273,13 @@ if (!class_exists('PostponePosts')) {
 
 								foreach ($thePosts as $post) {
 
-									$postUpdate = getUpdatePost($post, $theDays);
+									$postUpdate = self::getUpdatePost($post, $theDays);
 
 									?>
 
 										<tr>
 											<td><?php echo(self::formatDateShort($post->post_date)); ?></td>
-											<td><?php echo(self::formatDateShort($postUpdate->post_date)); ?></td>
+											<td><?php echo(self::formatDateShort($postUpdate['post_date'])); ?></td>
 											<td><?php echo($post->post_title); ?></td>
 										</tr>
 
@@ -332,19 +332,9 @@ if (!class_exists('PostponePosts')) {
 
 			foreach ($thePosts as $post) {
 
-				$postUpdate = getUpdatePost($post, $theDays);
+				$postUpdate = self::getUpdatePost($post, $theDays);
 
-				// debug
-				$postOriginal = array(
-						'ID' => $post->id,
-						'post_date' => $post_date,
-						'post_date_gmt' => $post_date_gmt,
-				);
-				echo(sprintf("<li>Original %s</li>\n", $postOriginal));
-				echo(sprintf("<li>Postponed %s</li>\n", $postUpdate));
-				// /debug
-
-				//$post_id =  wp_update_post($postUpdate, true);
+				$post_id =  wp_update_post($postUpdate, true);
 
 				if (!is_wp_error($post_id)) {
 
@@ -361,8 +351,8 @@ if (!class_exists('PostponePosts')) {
 				echo(sprintf("<li>Postponing from %s (GMT: %s) to %s (GMT: %s) for %s - %s</li>\n",
 						 self::formatDateShort($post->post_date),
 						 self::formatDateShort($post->post_date_gmt),
-						 self::formatDateShort($postUpdate->post_date),
-						 self::formatDateShort($postUpdate->post_date_gmt),
+						 self::formatDateShort($postUpdate['post_date']),
+						 self::formatDateShort($postUpdate['post_date_gmt']),
 						 $post->post_title,
 						 $message
 				));
@@ -387,7 +377,7 @@ if (!class_exists('PostponePosts')) {
 			$success = true;
 
 			// check if input is a number
-			$success &= true;
+			$success &= is_numeric($theDays);
 
 			// check if input is larger than 0
 			$success &= ($theDays > 0);
@@ -413,9 +403,9 @@ if (!class_exists('PostponePosts')) {
 			$postponedGMTDate = self::getPostponedDate($postGMTDate, $theDays);
 
 			return array(
-					'ID' => $thePost->id,
-					'post_date' => $postponedDate->format(),
-					'post_date_gmt' => $postponedGMTDate->format(),
+					'ID' => $thePost->ID,
+					'post_date' => $postponedDate->format('Y-m-d H:i:s'),
+					'post_date_gmt' => $postponedGMTDate->format('Y-m-d H:i:s'),
 			);
 
 		}

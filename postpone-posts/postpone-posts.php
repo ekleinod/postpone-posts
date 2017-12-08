@@ -108,7 +108,7 @@ if (!class_exists('PostponePosts')) {
 			get_current_screen()->add_help_tab(array(
 				'id'      => 'overview',
 				'title'   => __('Overview'),
-				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.'), DAYS_MIN, DAYS_MAX)),
+				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.'), self::DAYS_MIN, self::DAYS_MAX)),
 			));
 
 		}
@@ -387,12 +387,12 @@ if (!class_exists('PostponePosts')) {
 			}
 
 			// check if input is larger than min number of days
-			if ($theDays < DAYS_MIN) {
+			if ($theDays < self::DAYS_MIN) {
 				return false;
 			}
 
 			// check if input is smaller than max number of days
-			if ($theDays > DAYS_MAX) {
+			if ($theDays > self::DAYS_MAX) {
 				return false;
 			}
 

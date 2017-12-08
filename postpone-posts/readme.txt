@@ -33,9 +33,18 @@ Currently, there are no extensive safety measures for access rights etc.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 
+== Frequently Asked Questions ==
+
+= Can I postpone just some posts? =
+
+No, currently there is no selection of posts to postpone.
+
+
 == Screenshots ==
 
-1. Postpone-Posts-GUI
+1. Start page: set number of days to postpone
+2. Preview page: check consequences
+3. Result page: see a summary of the postpone result
 
 
 == Changelog ==
@@ -43,7 +52,7 @@ Currently, there are no extensive safety measures for access rights etc.
 = 0.1.0 =
 
 * first version of the plugin
-* functionality
+* basic functionality
 * not tested against misuse concerning roles, capabilities etc.
 
 
@@ -56,11 +65,15 @@ Currently, there are no extensive safety measures for access rights etc.
 
 == ToDo ==
 
+= Functionality =
+
+* selection of posts to postpone
+* option page for setting default postpone days
+
 = User Experience =
 
-* option page for setting default postpone days
-* nicer preview postpone dates and posts in first dialog
-* interactive preview of postpone dates and posts in first dialog
+* nicer preview of postpone dates and posts on start page
+* interactive preview of postpone dates and posts on start page
 * localization
 
 = Hardening =
@@ -69,3 +82,8 @@ Currently, there are no extensive safety measures for access rights etc.
 * concept for rights for postponing
 	* can only users postpone their own posts?
 	* can admin postpone all posts?
+
+= Technics =
+
+* use WP functions
+	* error handling and display

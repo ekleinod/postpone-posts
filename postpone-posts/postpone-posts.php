@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Postpone Posts
-Plugin URI; http://www.ekkart.de/computer/wordpress/plugins.html#postpone-posts
+Plugin URI; https://github.com/ekleinod/postpone-posts
 Description: Postpones all future (planned) posts by a selectable number of days.
 Version: 0.1.0
 Author: Ekkart Kleinod
@@ -50,6 +50,9 @@ if (!class_exists('PostponePosts')) {
 		const ACTION_PREVIEW = "preview-postpone";
 
 		const FIELD_DAYS = "days-postpone";
+
+		const DAYS_MIN = 1;
+		const DAYS_MAX = 365;
 
 		/**
 		 * Activation: sets up option of postpone days in database.
@@ -105,7 +108,7 @@ if (!class_exists('PostponePosts')) {
 			get_current_screen()->add_help_tab(array(
 				'id'      => 'overview',
 				'title'   => __('Overview'),
-				'content' => '<p>' . __('You can postpone all future posts shown in the box by the given number of days.') . '</p>',
+				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.'), DAYS_MIN, DAYS_MAX)),
 			));
 
 		}
@@ -368,21 +371,33 @@ if (!class_exists('PostponePosts')) {
 		/**
 		 * Check days input.
 		 *
+		 * - has to be a number
+		 * - has to be larger than min number of days
+		 * - has to be smaller than max number of days, that input is probably a typo
+		 *
 		 * @param theDays number of days to postpone
 		 *
 		 * @return correct input (true) or erroneous input (false)
 		 */
 		private static function checkDays($theDays) {
 
-			$success = true;
-
 			// check if input is a number
-			$success &= is_numeric($theDays);
+			if (!is_numeric($theDays)) {
+				return false;
+			}
 
-			// check if input is larger than 0
-			$success &= ($theDays > 0);
+			// check if input is larger than min number of days
+			if ($theDays < DAYS_MIN) {
+				return false;
+			}
 
-			return $success;
+			// check if input is smaller than max number of days
+			if ($theDays > DAYS_MAX) {
+				return false;
+			}
+
+			// valid input
+			return true;
 
 		}
 

@@ -3,7 +3,7 @@
 Contributors: ekleinod
 Tags: post, schedule
 Requires at least: 3.0.1
-Tested up to: 3.4
+Tested up to: 4.9.1
 Requires PHP: 5.2.4
 Stable tag: 0.1.0
 License: GPLv2 or later
@@ -53,7 +53,7 @@ No, currently there is no selection of posts to postpone.
 
 * first version of the plugin
 * basic functionality
-* not tested against misuse concerning roles, capabilities etc.
+* not tested against misuse concerning roles, capabilities etc. (see ToDo)
 
 
 == Upgrade Notice ==

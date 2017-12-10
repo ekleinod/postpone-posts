@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - link to readme.txt in readme.md
+- typos and layout of readme.txt
 
 ### Security
 

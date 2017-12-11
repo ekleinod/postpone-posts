@@ -42,6 +42,7 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
+		const OPTION_GROUP = 'postpone_posts';
 		const OPTION_DAYS = 'postpone_posts_days';
 		const OPTION_DAYS_DEFAULT = 1;
 
@@ -96,7 +97,13 @@ if (!class_exists('PostponePosts')) {
 		 */
 		public static function addToolsPage() {
 
-			add_management_page('Postpone Posts', 'Postpone', 'edit_posts', 'postpone_posts', 'PostponePosts::showToolsPage');
+			add_management_page(
+					'PostponePosts',
+					'Postpone Posts',
+					'edit_posts',
+					'postpone_posts_action',
+					'PostponePosts::showToolsPage'
+			);
 
 		}
 
@@ -469,6 +476,144 @@ if (!class_exists('PostponePosts')) {
 
 		}
 
+
+		/**
+		 * Init settings and options.
+		 */
+		public static function initSettings() {
+
+			register_setting(self::OPTION_GROUP, self::OPTION_DAYS);
+
+			add_settings_section(
+					'postpone_posts_section_days',
+					__('Day configuration'),
+					'self::showSettingsSectionDays',
+					OPTION_GROUP
+			);
+
+			add_settings_field(
+					'postpone_posts_field_days',
+					__('Days to postpone'),
+					'self::showSettingsFieldDays',
+					OPTION_GROUP,
+					'postpone_posts_section_days',
+					[
+						'label_for' => 'postpone_posts_field_days',
+						'class' => 'postpone_posts_row',
+						'postpone_posts_custom_data' => 'custom',
+					]
+			);
+
+		}
+
+		/**
+		 * Callback function for settings section "days".
+		 *
+		 * @param args array, have the following keys defined: title, id, callback.
+		 *             the values are defined at the add_settings_section() function.
+		 */
+		private static function showSettingsSectionDays($args) {
+
+			?>
+
+				<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e('Not clear where this is shown.'); ?></p>
+
+			<?php
+
+		}
+
+		/**
+		 * Callback function for settings field "days".
+		 *
+		 * @param args array, is defined at the add_settings_field() function.
+		 */
+		private static function showSettingsFieldDays($args) {
+
+			$options = get_option(self::OPTION_DAYS);
+
+			?>
+
+				<select id="<?php echo esc_attr($args['label_for']); ?>"
+					data-custom="<?php echo esc_attr($args['postpone_posts_custom_data']); ?>"
+					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr( $args['label_for'] ); ?>]"
+				>
+					<option value="red" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
+					<?php esc_html_e('red pill'); ?>
+					</option>
+					<option value="blue" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
+					<?php esc_html_e('blue pill'); ?>
+					</option>
+				</select>
+
+				<p class="description">
+					<?php esc_html_e('You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.'); ?>
+				</p>
+				<p class="description">
+					<?php esc_html_e('You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.'); ?>
+				</p>
+
+			<?php
+
+		}
+
+		/**
+		 * Top level menu.
+		 */
+		public static function addOptionsPage() {
+
+			add_options_page(
+					'PostponePosts',
+					'Postpone Posts',
+					'manage_options',
+					'postpone_posts_options',
+					'PostponePosts::showOptionsPage'
+			);
+
+		}
+
+		/**
+		 * Shows options page.
+		 */
+		public static function showOptionsPage() {
+
+			if (!current_user_can('manage_options')) {
+				return;
+			}
+
+			// check if the user have submitted the settings
+			// wordpress will add the "settings-updated" $_GET parameter to the url
+			if (isset($_GET['settings-updated'])) {
+				add_settings_error('popopo_messages', 'wporg_message', __('Settings Saved'), 'updated');
+			}
+
+			// show error/update messages
+			settings_errors('popopo_messages');
+
+			?>
+
+				<div class="wrap">
+
+					<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+
+					<form action="options.php" method="post">
+
+					<?php
+
+						// output security fields for the registered setting
+						settings_fields('postpone_posts');
+						// output setting sections and their fields
+						do_settings_sections('postpone_posts');
+						// output save settings button
+						submit_button('Save Settings');
+
+					?>
+
+					</form>
+				</div>
+
+			<?php
+		}
+
 	} // end of class PostponePosts
 
 	// maintenance
@@ -476,7 +621,10 @@ if (!class_exists('PostponePosts')) {
 	register_deactivation_hook(__FILE__, 'PostponePosts::deactivation');
 	register_uninstall_hook(__FILE__, 'PostponePosts::uninstall');
 
+	add_action('admin_init', 'PostponePosts::initSettings');
+
 	add_action('admin_menu', 'PostponePosts::addToolsPage');
+	add_action('admin_menu', 'PostponePosts::addOptionsPage');
 
 	add_filter('contextual_help', 'PostponePosts::addContextHelp', 5, 3);
 

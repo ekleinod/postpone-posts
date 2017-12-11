@@ -92,11 +92,11 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
-		 * Adds option page to tools menu.
+		 * Adds page to tools menu.
 		 */
-		public static function addOptionPage() {
+		public static function addToolsPage() {
 
-			add_management_page('Postpone Posts', 'Postpone', 'edit_posts', 'postpone_posts', 'PostponePosts::showOptionPage');
+			add_management_page('Postpone Posts', 'Postpone', 'edit_posts', 'postpone_posts', 'PostponePosts::showToolsPage');
 
 		}
 
@@ -114,9 +114,9 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
-		 * Option page: show input fields and affected posts.
+		 * Tool page: show input fields and affected posts, execute action.
 		 */
-		public static function showOptionPage() {
+		public static function showToolsPage() {
 
 			// check user capabilities
 			if (!current_user_can('edit_posts')) {
@@ -476,7 +476,7 @@ if (!class_exists('PostponePosts')) {
 	register_deactivation_hook(__FILE__, 'PostponePosts::deactivation');
 	register_uninstall_hook(__FILE__, 'PostponePosts::uninstall');
 
-	add_action('admin_menu', 'PostponePosts::addOptionPage');
+	add_action('admin_menu', 'PostponePosts::addToolsPage');
 
 	add_filter('contextual_help', 'PostponePosts::addContextHelp', 5, 3);
 

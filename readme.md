@@ -4,7 +4,7 @@ This project contains all files for the postpone posts plugin for wordpress.
 
 See readme.txt in plugin directory for more information.
 
-- [readme.txt](plugin/readme.txt)
+- [readme.txt](postpone-posts/readme.txt)
 - [changelog.md](changelog.md)
 
 All plugin files that are published as wordpress plugin reside in the folder "plugin".

@@ -533,18 +533,13 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
-
-				<select id="<?php echo esc_attr($args['label_for']); ?>"
-					data-custom="<?php echo esc_attr($args['postpone_posts_custom_data']); ?>"
-					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr( $args['label_for'] ); ?>]"
-				>
-					<option value="red" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
-					<?php esc_html_e('red pill'); ?>
-					</option>
-					<option value="blue" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
-					<?php esc_html_e('blue pill'); ?>
-					</option>
-				</select>
+				<input type="number"
+					id="<?php echo esc_attr($args['label_for']); ?>"
+					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr($args['label_for']); ?>]"
+					min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>"
+					value="<?php echo(isset($options[$args['label_for']]) ? $options[$args['label_for']] : 0); ?>"
+					autofocus="autofocus"
+				/>
 
 				<p class="description">
 					<?php echo(__('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)); ?>

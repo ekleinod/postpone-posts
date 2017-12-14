@@ -116,8 +116,8 @@ if (!class_exists('PostponePosts')) {
 
 			get_current_screen()->add_help_tab(array(
 				'id'      => 'overview',
-				'title'   => __('Overview'),
-				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.'), self::DAYS_MIN, self::DAYS_MAX)),
+				'title'   => __('Overview', self::ID),
+				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.', self::ID), self::DAYS_MIN, self::DAYS_MAX)),
 			));
 
 		}
@@ -164,14 +164,14 @@ if (!class_exists('PostponePosts')) {
 
 						} else {
 
-							self::printError(__('Unrecognized action.'));
+							self::printError(__('Unrecognized action.', self::ID));
 							self::showDaysInputPage($futurePosts);
 
 						}
 
 					} else {
 
-							self::printError(sprintf(__('Wrong number of days to postpone: %s'), $popoDays));
+							self::printError(sprintf(__('Wrong number of days to postpone: %s', self::ID), $popoDays));
 							self::showDaysInputPage($futurePosts);
 
 					}
@@ -205,18 +205,18 @@ if (!class_exists('PostponePosts')) {
 
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 
-					<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.')) ?></p>
+					<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.', self::ID)) ?></p>
 
-					<h2><?php echo(__('Postpone settings')); ?></h2>
+					<h2><?php echo(__('Postpone settings', self::ID)); ?></h2>
 
 					<p>
-						<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:')); ?></label>
+						<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
 						<input type="number" name="<?php echo(self::FIELD_DAYS); ?>" min="1" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
-					<h2><?php echo(__('Affected posts (display only)')); ?></h2>
+					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>
 
-					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.')); ?>"><?php
+					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.', self::ID)); ?>"><?php
 
 					foreach ($thePosts as $post) {
 						$postUpdate = self::getUpdatePost($post, get_option(self::OPTION_DAYS));
@@ -258,9 +258,9 @@ if (!class_exists('PostponePosts')) {
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 					<input type="hidden" name="<?php echo(self::FIELD_DAYS); ?>" value="<?php echo($theDays); ?>" />
 
-					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".')) ?></p>
+					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', self::ID)) ?></p>
 
-					<h2><?php echo(__('Preview')); ?></h2>
+					<h2><?php echo(__('Preview', self::ID)); ?></h2>
 
 					<p>Days to postpone: <?php echo($theDays); ?></p>
 
@@ -488,14 +488,14 @@ if (!class_exists('PostponePosts')) {
 
 			add_settings_section(
 					'postpone_posts_section_days',
-					__('Day configuration'),
+					__('Day configuration', self::ID),
 					'PostponePosts::showSettingsSectionDays',
 					self::OPTION_GROUP
 			);
 
 			add_settings_field(
 					'postpone_posts_field_days',
-					__('Days to postpone'),
+					__('Days to postpone', self::ID),
 					'PostponePosts::showSettingsFieldDays',
 					self::OPTION_GROUP,
 					'postpone_posts_section_days',
@@ -585,7 +585,7 @@ if (!class_exists('PostponePosts')) {
 			// check if the user have submitted the settings
 			// wordpress will add the "settings-updated" $_GET parameter to the url
 			if (isset($_GET['settings-updated'])) {
-				add_settings_error('popopo_messages', 'wporg_message', __('Settings Saved'), 'updated');
+				add_settings_error('popopo_messages', 'wporg_message', __('Settings Saved', self::ID), 'updated');
 			}
 
 			// show error/update messages

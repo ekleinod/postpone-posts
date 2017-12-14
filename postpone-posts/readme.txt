@@ -14,17 +14,13 @@ Postpones all future (planned) posts by a selectable number of days.
 
 == Description ==
 
-Imagine you wrote a lot of planned posts, that will be published in the future.
-Now an event occurs that forces you to react for one or more days.
-Either there are overlapping posts or you have to postpone (i.e. reschedule) all your future posts.
+Imagine you wrote a lot of planned posts that will be published in the future. Now an event occurs that forces you to react for one or more days. Either there are overlapping posts or you have to postpone (i.e. reschedule) all your future posts.
 
-This is where *Postpone Posts* cones in handy.
-It takes all planned posts and postpones them by a selectable number of days.
+This is where *Postpone Posts* comes in handy. It takes all planned posts and postpones them by a selectable number of days.
 
 Postponing can only be done by users with edit capabilities.
 
-**Important:** this plugin is created and tested for a one user installation of wordpress.
-Currently, there are no extensive safety measures for access rights etc.
+**Important:** this plugin is created and tested for a one user installation of wordpress. Currently, there are no extensive safety measures for access rights etc.
 
 
 == Installation ==
@@ -75,6 +71,7 @@ No, currently there is no selection of posts to postpone.
 * nicer preview of postpone dates and posts on start page
 * interactive preview of postpone dates and posts on start page
 * localization
+* better context help
 
 = Hardening =
 

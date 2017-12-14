@@ -42,6 +42,9 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
+		const ID = 'popopo';
+
+		const OPTION_GROUP = 'postpone_posts';
 		const OPTION_DAYS = 'postpone_posts_days';
 		const OPTION_DAYS_DEFAULT = 1;
 
@@ -92,11 +95,17 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
-		 * Adds option page to tools menu.
+		 * Adds page to tools menu.
 		 */
-		public static function addOptionPage() {
+		public static function addToolsPage() {
 
-			add_management_page('Postpone Posts', 'Postpone', 'edit_posts', 'postpone_posts', 'PostponePosts::showOptionPage');
+			add_management_page(
+					'Postpone Posts', // page title
+					'Postpone Posts', // menu title
+					'edit_posts', // capability
+					'postpone_posts_action', // menu slug, i.e. url param "page"
+					'PostponePosts::showToolsPage' // function to display page
+			);
 
 		}
 
@@ -107,16 +116,16 @@ if (!class_exists('PostponePosts')) {
 
 			get_current_screen()->add_help_tab(array(
 				'id'      => 'overview',
-				'title'   => __('Overview'),
-				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.'), self::DAYS_MIN, self::DAYS_MAX)),
+				'title'   => __('Overview', self::ID),
+				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.', self::ID), self::DAYS_MIN, self::DAYS_MAX)),
 			));
 
 		}
 
 		/**
-		 * Option page: show input fields and affected posts.
+		 * Tool page: show input fields and affected posts, execute action.
 		 */
-		public static function showOptionPage() {
+		public static function showToolsPage() {
 
 			// check user capabilities
 			if (!current_user_can('edit_posts')) {
@@ -155,14 +164,14 @@ if (!class_exists('PostponePosts')) {
 
 						} else {
 
-							self::printError(__('Unrecognized action.'));
+							self::printError(__('Unrecognized action.', self::ID));
 							self::showDaysInputPage($futurePosts);
 
 						}
 
 					} else {
 
-							self::printError(sprintf(__('Wrong number of days to postpone: %s'), $popoDays));
+							self::printError(sprintf(__('Wrong number of days to postpone: %s', self::ID), $popoDays));
 							self::showDaysInputPage($futurePosts);
 
 					}
@@ -196,18 +205,18 @@ if (!class_exists('PostponePosts')) {
 
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 
-					<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.')) ?></p>
+					<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.', self::ID)) ?></p>
 
-					<h2><?php echo(__('Postpone settings')); ?></h2>
+					<h2><?php echo(__('Postpone settings', self::ID)); ?></h2>
 
 					<p>
-						<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:')); ?></label>
+						<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
 						<input type="number" name="<?php echo(self::FIELD_DAYS); ?>" min="1" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
-					<h2><?php echo(__('Affected posts (display only)')); ?></h2>
+					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>
 
-					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.')); ?>"><?php
+					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.', self::ID)); ?>"><?php
 
 					foreach ($thePosts as $post) {
 						$postUpdate = self::getUpdatePost($post, get_option(self::OPTION_DAYS));
@@ -249,9 +258,9 @@ if (!class_exists('PostponePosts')) {
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 					<input type="hidden" name="<?php echo(self::FIELD_DAYS); ?>" value="<?php echo($theDays); ?>" />
 
-					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".')) ?></p>
+					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', self::ID)) ?></p>
 
-					<h2><?php echo(__('Preview')); ?></h2>
+					<h2><?php echo(__('Preview', self::ID)); ?></h2>
 
 					<p>Days to postpone: <?php echo($theDays); ?></p>
 
@@ -469,6 +478,140 @@ if (!class_exists('PostponePosts')) {
 
 		}
 
+
+		/**
+		 * Init settings and options.
+		 */
+		public static function initSettings() {
+
+			register_setting(self::OPTION_GROUP, self::OPTION_DAYS);
+
+			add_settings_section(
+					'postpone_posts_section_days', // section id
+					__('Basic configuration', self::ID), // title
+					'PostponePosts::showSettingsSectionDays', // function to display settings section
+					self::OPTION_GROUP // option group id
+			);
+
+			add_settings_field(
+					'postpone_posts_field_days', // field id
+					__('Days to postpone', self::ID), // title
+					'PostponePosts::showSettingsFieldDays', // function to display field input form
+					self::OPTION_GROUP, // option group id
+					'postpone_posts_section_days', // section id
+					[
+						'label_for' => 'postpone_posts_field_days', // params
+					]
+			);
+
+		}
+
+		/**
+		 * Callback function for settings section "days".
+		 *
+		 * @param args array, have the following keys defined: title, id, callback.
+		 *             the values are defined at the add_settings_section() function.
+		 */
+		public static function showSettingsSectionDays($args) {
+
+			?>
+
+				<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
+
+			<?php
+
+		}
+
+		/**
+		 * Callback function for settings field "days".
+		 *
+		 * @param args array, is defined at the add_settings_field() function.
+		 */
+		public static function showSettingsFieldDays($args) {
+
+			$options = get_option(self::OPTION_DAYS);
+
+			?>
+
+
+				<select id="<?php echo esc_attr($args['label_for']); ?>"
+					data-custom="<?php echo esc_attr($args['postpone_posts_custom_data']); ?>"
+					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr( $args['label_for'] ); ?>]"
+				>
+					<option value="red" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
+					<?php esc_html_e('red pill'); ?>
+					</option>
+					<option value="blue" <?php echo isset($options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
+					<?php esc_html_e('blue pill'); ?>
+					</option>
+				</select>
+
+				<p class="description">
+					<?php echo(__('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)); ?>
+				</p>
+
+			<?php
+
+		}
+
+		/**
+		 * Entry in options menu.
+		 */
+		public static function addOptionsPage() {
+
+			add_options_page(
+					'Postpone Posts', // page title
+					'Postpone Posts', // menu title
+					'manage_options', // capability
+					'postpone_posts_options', // menu slug, i.e. url param "page"
+					'PostponePosts::showOptionsPage' // function to display page
+			);
+
+		}
+
+		/**
+		 * Shows options page.
+		 */
+		public static function showOptionsPage() {
+
+			if (!current_user_can('manage_options')) {
+				return;
+			}
+
+			// check if the user have submitted the settings
+			// wordpress will add the "settings-updated" $_GET parameter to the url
+			if (isset($_GET['settings-updated'])) {
+				add_settings_error('popopo_messages', 'wporg_message', __('Settings Saved', self::ID), 'updated');
+			}
+
+			// show error/update messages
+			settings_errors('popopo_messages');
+
+			?>
+
+				<div class="wrap">
+
+					<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+
+					<form action="options.php" method="post">
+
+					<?php
+
+						// output security fields for the registered setting
+						settings_fields('postpone_posts');
+						// output setting sections and their fields
+						do_settings_sections('postpone_posts');
+						// output save settings button
+						submit_button('Save Settings');
+
+					?>
+
+					</form>
+				</div>
+
+			<?php
+		}
+
 	} // end of class PostponePosts
 
 	// maintenance
@@ -476,7 +619,10 @@ if (!class_exists('PostponePosts')) {
 	register_deactivation_hook(__FILE__, 'PostponePosts::deactivation');
 	register_uninstall_hook(__FILE__, 'PostponePosts::uninstall');
 
-	add_action('admin_menu', 'PostponePosts::addOptionPage');
+	add_action('admin_init', 'PostponePosts::initSettings');
+
+	add_action('admin_menu', 'PostponePosts::addToolsPage');
+	add_action('admin_menu', 'PostponePosts::addOptionsPage');
 
 	add_filter('contextual_help', 'PostponePosts::addContextHelp', 5, 3);
 

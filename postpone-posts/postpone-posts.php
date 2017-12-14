@@ -210,8 +210,8 @@ if (!class_exists('PostponePosts')) {
 					<h2><?php echo(__('Postpone settings', self::ID)); ?></h2>
 
 					<p>
-						<label for="postpone_posts_days" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
-						<input type="number" name="<?php echo(self::FIELD_DAYS); ?>" min="1" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
+						<label for="<?php echo(self::FIELD_DAYS); ?>" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
+						<input type="number" name="<?php echo(self::FIELD_DAYS); ?>" id="<?php echo(self::FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
 					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>

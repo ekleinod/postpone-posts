@@ -71,6 +71,7 @@ No, currently there is no selection of posts to postpone.
 * nicer preview of postpone dates and posts on start page
 * interactive preview of postpone dates and posts on start page
 * localization
+* better context help
 
 = Hardening =
 

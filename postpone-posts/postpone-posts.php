@@ -559,16 +559,16 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
-		 * Top level menu.
+		 * Entry in options menu.
 		 */
 		public static function addOptionsPage() {
 
 			add_options_page(
-					'PostponePosts',
-					'Postpone Posts',
-					'manage_options',
-					'postpone_posts_options',
-					'PostponePosts::showOptionsPage'
+					'Postpone Posts', // page title
+					'Postpone Posts', // menu title
+					'manage_options', // capability
+					'postpone_posts_options', // menu slug, i.e. url param "page"
+					'PostponePosts::showOptionsPage' // function to display page
 			);
 
 		}

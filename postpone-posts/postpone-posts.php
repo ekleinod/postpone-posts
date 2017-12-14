@@ -494,13 +494,13 @@ if (!class_exists('PostponePosts')) {
 			);
 
 			add_settings_field(
-					'postpone_posts_field_days', // field id
+					self::OPTION_DAYS, // field id (only used internally)
 					__('Days to postpone', self::ID), // title
 					'PostponePosts::showSettingsFieldDays', // function to display field input form
 					self::OPTION_GROUP, // option group id
 					'postpone_posts_section_days', // section id
 					[
-						'label_for' => 'postpone_posts_field_days', // params
+						'label_for' => self::OPTION_DAYS, // params
 					]
 			);
 
@@ -516,7 +516,7 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
-				<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
+				<p id="<?php echo esc_attr($args['id']); ?>"><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
 
 			<?php
 
@@ -529,7 +529,7 @@ if (!class_exists('PostponePosts')) {
 		 */
 		public static function showSettingsFieldDays($args) {
 
-			$options = get_option(self::OPTION_DAYS);
+			$options = array($args['label_for'] => get_option($args['label_for']));
 
 			?>
 

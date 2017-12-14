@@ -488,14 +488,14 @@ if (!class_exists('PostponePosts')) {
 					'postpone_posts_section_days',
 					__('Day configuration'),
 					'self::showSettingsSectionDays',
-					OPTION_GROUP
+					self::OPTION_GROUP
 			);
 
 			add_settings_field(
 					'postpone_posts_field_days',
 					__('Days to postpone'),
 					'self::showSettingsFieldDays',
-					OPTION_GROUP,
+					self::OPTION_GROUP,
 					'postpone_posts_section_days',
 					[
 						'label_for' => 'postpone_posts_field_days',

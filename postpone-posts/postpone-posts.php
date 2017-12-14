@@ -487,22 +487,20 @@ if (!class_exists('PostponePosts')) {
 			register_setting(self::OPTION_GROUP, self::OPTION_DAYS);
 
 			add_settings_section(
-					'postpone_posts_section_days',
-					__('Day configuration', self::ID),
-					'PostponePosts::showSettingsSectionDays',
-					self::OPTION_GROUP
+					'postpone_posts_section_days', // section id
+					__('Basic configuration', self::ID), // title
+					'PostponePosts::showSettingsSectionDays', // function to display settings section
+					self::OPTION_GROUP // option group id
 			);
 
 			add_settings_field(
-					'postpone_posts_field_days',
-					__('Days to postpone', self::ID),
-					'PostponePosts::showSettingsFieldDays',
-					self::OPTION_GROUP,
-					'postpone_posts_section_days',
+					'postpone_posts_field_days', // field id
+					__('Days to postpone', self::ID), // title
+					'PostponePosts::showSettingsFieldDays', // function to display field input form
+					self::OPTION_GROUP, // option group id
+					'postpone_posts_section_days', // section id
 					[
-						'label_for' => 'postpone_posts_field_days',
-						'class' => 'postpone_posts_row',
-						'postpone_posts_custom_data' => 'custom',
+						'label_for' => 'postpone_posts_field_days', // params
 					]
 			);
 
@@ -518,7 +516,7 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
-				<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e('Not clear where this is shown.'); ?></p>
+				<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
 
 			<?php
 
@@ -535,6 +533,7 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
+
 				<select id="<?php echo esc_attr($args['label_for']); ?>"
 					data-custom="<?php echo esc_attr($args['postpone_posts_custom_data']); ?>"
 					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr( $args['label_for'] ); ?>]"
@@ -548,10 +547,7 @@ if (!class_exists('PostponePosts')) {
 				</select>
 
 				<p class="description">
-					<?php esc_html_e('You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.'); ?>
-				</p>
-				<p class="description">
-					<?php esc_html_e('You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.'); ?>
+					<?php echo(__('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)); ?>
 				</p>
 
 			<?php

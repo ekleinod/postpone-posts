@@ -487,14 +487,14 @@ if (!class_exists('PostponePosts')) {
 			add_settings_section(
 					'postpone_posts_section_days',
 					__('Day configuration'),
-					'self::showSettingsSectionDays',
+					'PostponePosts::showSettingsSectionDays',
 					self::OPTION_GROUP
 			);
 
 			add_settings_field(
 					'postpone_posts_field_days',
 					__('Days to postpone'),
-					'self::showSettingsFieldDays',
+					'PostponePosts::showSettingsFieldDays',
 					self::OPTION_GROUP,
 					'postpone_posts_section_days',
 					[
@@ -512,7 +512,7 @@ if (!class_exists('PostponePosts')) {
 		 * @param args array, have the following keys defined: title, id, callback.
 		 *             the values are defined at the add_settings_section() function.
 		 */
-		private static function showSettingsSectionDays($args) {
+		public static function showSettingsSectionDays($args) {
 
 			?>
 
@@ -527,7 +527,7 @@ if (!class_exists('PostponePosts')) {
 		 *
 		 * @param args array, is defined at the add_settings_field() function.
 		 */
-		private static function showSettingsFieldDays($args) {
+		public static function showSettingsFieldDays($args) {
 
 			$options = get_option(self::OPTION_DAYS);
 

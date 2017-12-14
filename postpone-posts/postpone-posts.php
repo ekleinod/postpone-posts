@@ -42,6 +42,8 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
+		const ID = 'popopo';
+
 		const OPTION_GROUP = 'postpone_posts';
 		const OPTION_DAYS = 'postpone_posts_days';
 		const OPTION_DAYS_DEFAULT = 1;
@@ -98,11 +100,11 @@ if (!class_exists('PostponePosts')) {
 		public static function addToolsPage() {
 
 			add_management_page(
-					'PostponePosts',
-					'Postpone Posts',
-					'edit_posts',
-					'postpone_posts_action',
-					'PostponePosts::showToolsPage'
+					'Postpone Posts', // page title
+					'Postpone Posts', // menu title
+					'edit_posts', // capability
+					'postpone_posts_action', // menu slug, i.e. url param "page"
+					'PostponePosts::showToolsPage' // function to display page
 			);
 
 		}

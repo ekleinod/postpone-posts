@@ -42,17 +42,17 @@ if (!class_exists('PostponePosts')) {
 	 */
 	class PostponePosts {
 
-		const ID = 'popopo';
+		const ID = 'postpone_posts';
 
-		const OPTION_GROUP = 'postpone_posts';
-		const OPTION_DAYS = 'postpone_posts_days';
-		const OPTION_DAYS_DEFAULT = 1;
+		const OPTION_GROUP = self::ID;
+		const OPTION_DAYS = self::ID . '_days';
+		const OPTION_DAYS_DEFAULT = 111;
 
-		const ACTION_CANCEL = "cancel-postpone";
-		const ACTION_POSTPONE = "do-postpone";
-		const ACTION_PREVIEW = "preview-postpone";
+		const ACTION_CANCEL = "cancel-" . self::ID;
+		const ACTION_POSTPONE = "do-" . self::ID;
+		const ACTION_PREVIEW = "preview-" . self::ID;
 
-		const FIELD_DAYS = "days-postpone";
+		const INPUT_FIELD_DAYS = "days-postpone";
 
 		const DAYS_MIN = 1;
 		const DAYS_MAX = 365;
@@ -148,19 +148,19 @@ if (!class_exists('PostponePosts')) {
 
 				<?php
 
-				if ((count($futurePosts) > 0) && isset($_GET[self::FIELD_DAYS])) {
+				if ((count($futurePosts) > 0) && isset($_GET[self::INPUT_FIELD_DAYS])) {
 
-					$popoDays = $_GET[self::FIELD_DAYS];
+					$popoDays = $_GET[self::INPUT_FIELD_DAYS];
 					if (self::checkDays($popoDays)) {
 
 						// trigger actions depending on sending form
 						if (isset($_GET[self::ACTION_POSTPONE])) {
 
-							self::showActionPage($futurePosts, $_GET[self::FIELD_DAYS]);
+							self::showActionPage($futurePosts, $_GET[self::INPUT_FIELD_DAYS]);
 
 						} else if (isset($_GET[self::ACTION_PREVIEW])) {
 
-							self::showPreviewPage($futurePosts, $_GET[self::FIELD_DAYS]);
+							self::showPreviewPage($futurePosts, $_GET[self::INPUT_FIELD_DAYS]);
 
 						} else {
 
@@ -210,8 +210,8 @@ if (!class_exists('PostponePosts')) {
 					<h2><?php echo(__('Postpone settings', self::ID)); ?></h2>
 
 					<p>
-						<label for="<?php echo(self::FIELD_DAYS); ?>" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
-						<input type="number" name="<?php echo(self::FIELD_DAYS); ?>" id="<?php echo(self::FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
+						<label for="<?php echo(self::INPUT_FIELD_DAYS); ?>" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
+						<input type="number" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" id="<?php echo(self::INPUT_FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
 					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>
@@ -256,7 +256,7 @@ if (!class_exists('PostponePosts')) {
 				<form method="get">
 
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
-					<input type="hidden" name="<?php echo(self::FIELD_DAYS); ?>" value="<?php echo($theDays); ?>" />
+					<input type="hidden" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" value="<?php echo($theDays); ?>" />
 
 					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', self::ID)) ?></p>
 
@@ -484,7 +484,16 @@ if (!class_exists('PostponePosts')) {
 		 */
 		public static function initSettings() {
 
-			register_setting(self::OPTION_GROUP, self::OPTION_DAYS);
+			register_setting(
+					self::OPTION_GROUP,
+					self::OPTION_DAYS,
+					[
+							'type' => 'integer',
+							'description' => __('Number of days to postpone', self::ID),
+							//'sanitize_callback' => 'PostponePosts::checkDays',
+							'default' => OPTION_DAYS_DEFAULT
+					]
+			);
 
 			add_settings_section(
 					'postpone_posts_section_days', // section id

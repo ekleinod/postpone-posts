@@ -43,11 +43,12 @@ if (!class_exists('PostponePosts')) {
 	class PostponePosts {
 
 		const ID = 'postpone_posts';
+		const PLUGIN_NAME = 'Postpone Posts';
 
-		const ID_OPTION_GROUP = self::ID;
 		const NAME_OPTION_DAYS = self::ID . '_days';
-		const OPTION_DAYS_DEFAULT = 111;
+		const OPTION_DAYS_DEFAULT = 1;
 
+		const ID_SETTING_GROUP = self::ID;
 		const ID_SETTINGS_SECTION_DAYS = self::ID . '_section_days';
 		const ID_SETTINGS_FIELD_DAYS = self::ID . '_field_days';
 
@@ -103,8 +104,8 @@ if (!class_exists('PostponePosts')) {
 		public static function addToolsPage() {
 
 			add_management_page(
-					'Postpone Posts', // page title
-					'Postpone Posts', // menu title
+					self::PLUGIN_NAME, // page title
+					self::PLUGIN_NAME, // menu title
 					'edit_posts', // capability
 					'postpone_posts_action', // menu slug, i.e. url param "page"
 					'PostponePosts::showToolsPage' // function to display page
@@ -250,7 +251,7 @@ if (!class_exists('PostponePosts')) {
 		 * @param thePosts posts to show
 		 * @param theDays days to postpone (sanitized number > 0)
 		 */
-		private static function showPreviewPage($thePosts, $theDays) {
+		private static function showPreviewPage($thePosts, $theInput) {
 
 			global $plugin_page;
 
@@ -259,13 +260,13 @@ if (!class_exists('PostponePosts')) {
 				<form method="get">
 
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
-					<input type="hidden" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" value="<?php echo($theDays); ?>" />
+					<input type="hidden" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" value="<?php echo($theInput); ?>" />
 
 					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', self::ID)) ?></p>
 
 					<h2><?php echo(__('Preview', self::ID)); ?></h2>
 
-					<p>Days to postpone: <?php echo($theDays); ?></p>
+					<p>Days to postpone: <?php echo($theInput); ?></p>
 
 					<table>
 						<thead>
@@ -288,7 +289,7 @@ if (!class_exists('PostponePosts')) {
 
 								foreach ($thePosts as $post) {
 
-									$postUpdate = self::getUpdatePost($post, $theDays);
+									$postUpdate = self::getUpdatePost($post, $theInput);
 
 									?>
 
@@ -338,7 +339,7 @@ if (!class_exists('PostponePosts')) {
 		 * @param thePosts posts to show
 		 * @param theDays days to postpone (sanitized number > 0)
 		 */
-		private static function showActionPage($thePosts, $theDays) {
+		private static function showActionPage($thePosts, $theInput) {
 
 			echo('<ul>');
 
@@ -347,7 +348,7 @@ if (!class_exists('PostponePosts')) {
 
 			foreach ($thePosts as $post) {
 
-				$postUpdate = self::getUpdatePost($post, $theDays);
+				$postUpdate = self::getUpdatePost($post, $theInput);
 
 				$post_id =  wp_update_post($postUpdate, true);
 
@@ -381,39 +382,6 @@ if (!class_exists('PostponePosts')) {
 		}
 
 		/**
-		 * Check days input.
-		 *
-		 * - has to be a number
-		 * - has to be larger than min number of days
-		 * - has to be smaller than max number of days, that input is probably a typo
-		 *
-		 * @param theDays number of days to postpone
-		 *
-		 * @return correct input (true) or erroneous input (false)
-		 */
-		private static function checkDays($theDays) {
-
-			// check if input is a number
-			if (!is_numeric($theDays)) {
-				return false;
-			}
-
-			// check if input is larger than min number of days
-			if ($theDays < self::DAYS_MIN) {
-				return false;
-			}
-
-			// check if input is smaller than max number of days
-			if ($theDays > self::DAYS_MAX) {
-				return false;
-			}
-
-			// valid input
-			return true;
-
-		}
-
-		/**
 		 * Compute array for postponed post.
 		 *
 		 * @param thePost original post
@@ -421,13 +389,13 @@ if (!class_exists('PostponePosts')) {
 		 *
 		 * @return postponed post data
 		 */
-		private static function getUpdatePost($thePost, $theDays) {
+		private static function getUpdatePost($thePost, $theInput) {
 
 			$postDate = new DateTime($thePost->post_date);
-			$postponedDate = self::getPostponedDate($postDate, $theDays);
+			$postponedDate = self::getPostponedDate($postDate, $theInput);
 
 			$postGMTDate = new DateTime($thePost->post_date_gmt);
-			$postponedGMTDate = self::getPostponedDate($postGMTDate, $theDays);
+			$postponedGMTDate = self::getPostponedDate($postGMTDate, $theInput);
 
 			return array(
 					'ID' => $thePost->ID,
@@ -445,10 +413,10 @@ if (!class_exists('PostponePosts')) {
 		 *
 		 * @return postponed date
 		 */
-		private static function getPostponedDate($theDate, $theDays) {
+		private static function getPostponedDate($theDate, $theInput) {
 
 			$dteReturn = clone $theDate;
-			return $dteReturn->add(new DateInterval(sprintf('P%sD', $theDays)));
+			return $dteReturn->add(new DateInterval(sprintf('P%sD', $theInput)));
 
 		}
 
@@ -488,13 +456,10 @@ if (!class_exists('PostponePosts')) {
 		public static function initSettings() {
 
 			register_setting(
-					self::ID_OPTION_GROUP,
+					self::ID_SETTING_GROUP,
 					self::NAME_OPTION_DAYS,
 					[
-							'type' => 'integer',
-							'description' => __('Number of days to postpone', self::ID),
-							//'sanitize_callback' => 'PostponePosts::checkDays',
-							'default' => OPTION_DAYS_DEFAULT
+						'sanitize_callback' => 'PostponePosts::validateDays'
 					]
 			);
 
@@ -502,19 +467,22 @@ if (!class_exists('PostponePosts')) {
 					self::ID_SETTINGS_SECTION_DAYS, // section id
 					__('Basic configuration', self::ID), // title
 					'PostponePosts::showSettingsSectionDays', // function to display settings section
-					self::ID_OPTION_GROUP // option group id
+					self::ID_SETTING_GROUP // option group id
 			);
 
 			add_settings_field(
 					self::ID_SETTINGS_FIELD_DAYS, // field id (only used internally)
 					__('Days to postpone', self::ID), // title
 					'PostponePosts::showSettingsFieldDays', // function to display field input form
-					self::ID_OPTION_GROUP, // option group id
+					self::ID_SETTING_GROUP, // option group id
 					self::ID_SETTINGS_SECTION_DAYS, // section id
 					[
-						'label_for' => self::NAME_OPTION_DAYS, // params
+						'label_for' => self::NAME_OPTION_DAYS,
+						'type' => 'number',
 						'min_value' => self::DAYS_MIN,
 						'max_value' => self::DAYS_MAX,
+						'default_value' => self::OPTION_DAYS_DEFAULT,
+						'description' => __('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)
 					]
 			);
 
@@ -543,21 +511,18 @@ if (!class_exists('PostponePosts')) {
 		 */
 		public static function showSettingsFieldDays($args) {
 
-			$settingNumberOfDays = get_option($args['label_for']);
-
 			?>
 
-				<input type="number"
+				<input type="<?php echo(esc_attr($args['type'])); ?>"
 					id="<?php echo(esc_attr($args['label_for'])); ?>"
 					name="<?php echo(esc_attr($args['label_for'])); ?>"
 					min="<?php echo(esc_attr($args['min_value'])); ?>"
 					max="<?php echo(esc_attr($args['max_value'])); ?>"
-					value="<?php echo(esc_attr(get_option($args['label_for']))); ?>"
-					autofocus="autofocus"
+					value="<?php echo(esc_attr(get_option($args['label_for'], $args['default_value']))); ?>"
 				/>
 
 				<p class="description">
-					<?php echo(__('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)); ?>
+					<?php echo(esc_attr($args['description'])); ?>
 				</p>
 
 			<?php
@@ -570,8 +535,8 @@ if (!class_exists('PostponePosts')) {
 		public static function addOptionsPage() {
 
 			add_options_page(
-					'Postpone Posts', // page title
-					'Postpone Posts', // menu title
+					self::PLUGIN_NAME, // page title
+					self::PLUGIN_NAME, // menu title
 					'manage_options', // capability
 					'postpone_posts_options', // menu slug, i.e. url param "page"
 					'PostponePosts::showOptionsPage' // function to display page
@@ -594,24 +559,99 @@ if (!class_exists('PostponePosts')) {
 
 					<h1><?php echo(esc_html(get_admin_page_title())); ?></h1>
 
+					<p><?php echo(sprintf(__('%s postpones all future (planned) posts by a selectable number of days.'), self::PLUGIN_NAME)); ?></p>
+
 					<form action="options.php" method="post">
 
-					<?php
+						<?php
 
-						// output security fields for the registered setting
-						settings_fields('postpone_posts');
+							// output security fields for the registered setting
+							settings_fields(self::ID_SETTING_GROUP);
 
-						// output setting sections and their fields
-						do_settings_sections('postpone_posts');
+							// output setting sections and their fields
+							do_settings_sections(self::ID_SETTING_GROUP);
 
-						submit_button('Save Settings');
+							submit_button();
 
-					?>
+						?>
 
 					</form>
 				</div>
 
 			<?php
+		}
+
+		/**
+		 * Validate days input from options page.
+		 *
+		 * I cannot stop options from being saved in the database,
+		 * thus a valid value has to be transmitted to the database.
+		 *
+		 * That's why the check of the input is separated from the validation for
+		 * the options page.
+		 *
+		 * @param theInput input value of number of days to postpone
+		 *
+		 * @return number of days to store in the database
+		 */
+		public static function validateDays($theInput) {
+
+			$validValue = get_option(self::NAME_OPTION_DAYS, self::OPTION_DAYS_DEFAULT);
+
+			if (self::checkDays($theInput)) {
+				$validValue = $theInput;
+			}
+
+			return $validValue;
+
+		}
+
+		/**
+		 * Check days input.
+		 *
+		 * - has to be a number
+		 * - has to be larger than min number of days
+		 * - has to be smaller than max number of days, that input is probably a typo
+		 *
+		 * @param theInput input value of number of days to postpone
+		 *
+		 * @return correct input (true) or erroneous input (false)
+		 */
+		private static function checkDays($theInput) {
+
+			// check if input is a number
+			if (!is_numeric($theInput)) {
+				add_settings_error(
+						self::ID_SETTINGS_FIELD_DAYS,
+						self::ID_SETTINGS_FIELD_DAYS,
+						sprintf(__('"%s" is no numeric value.', self::ID), $theInput)
+				);
+				return false;
+			}
+
+			// check if input is larger than min number of days
+			if ($theInput < self::DAYS_MIN) {
+				add_settings_error(
+						self::ID_SETTINGS_FIELD_DAYS,
+						self::ID_SETTINGS_FIELD_DAYS,
+						sprintf(__('"%d" is smaller than the minimal number of days (%d).', self::ID), $theInput, self::DAYS_MIN)
+				);
+				return false;
+			}
+
+			// check if input is smaller than max number of days
+			if ($theInput > self::DAYS_MAX) {
+				add_settings_error(
+						self::ID_SETTINGS_FIELD_DAYS,
+						self::ID_SETTINGS_FIELD_DAYS,
+						sprintf(__('"%d" is larger than the maximal number of days (%d).', self::ID), $theInput, self::DAYS_MAX)
+				);
+				return false;
+			}
+
+			// valid input
+			return true;
+
 		}
 
 	} // end of class PostponePosts

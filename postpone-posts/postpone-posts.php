@@ -44,9 +44,12 @@ if (!class_exists('PostponePosts')) {
 
 		const ID = 'postpone_posts';
 
-		const OPTION_GROUP = self::ID;
-		const OPTION_DAYS = self::ID . '_days';
+		const ID_OPTION_GROUP = self::ID;
+		const NAME_OPTION_DAYS = self::ID . '_days';
 		const OPTION_DAYS_DEFAULT = 111;
+
+		const ID_SETTINGS_SECTION_DAYS = self::ID . '_section_days';
+		const ID_SETTINGS_FIELD_DAYS = self::ID . '_field_days';
 
 		const ACTION_CANCEL = "cancel-" . self::ID;
 		const ACTION_POSTPONE = "do-" . self::ID;
@@ -63,10 +66,10 @@ if (!class_exists('PostponePosts')) {
 		public static function activation() {
 
 			// if postpone days do not exist in options database
-			if (!get_option(self::OPTION_DAYS)) {
+			if (!get_option(self::NAME_OPTION_DAYS)) {
 
 				// create field and set number of days to 1
-				add_option(self::OPTION_DAYS, self::OPTION_DAYS_DEFAULT);
+				add_option(self::NAME_OPTION_DAYS, self::OPTION_DAYS_DEFAULT);
 
 			}
 
@@ -85,10 +88,10 @@ if (!class_exists('PostponePosts')) {
 		public static function uninstall() {
 
 			// if postpone days exist in options database
-			if (get_option(self::OPTION_DAYS)) {
+			if (get_option(self::NAME_OPTION_DAYS)) {
 
 				// remove field
-				delete_option(self::OPTION_DAYS);
+				delete_option(self::NAME_OPTION_DAYS);
 
 			}
 
@@ -211,7 +214,7 @@ if (!class_exists('PostponePosts')) {
 
 					<p>
 						<label for="<?php echo(self::INPUT_FIELD_DAYS); ?>" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
-						<input type="number" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" id="<?php echo(self::INPUT_FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::OPTION_DAYS)); ?>" autofocus="autofocus" />
+						<input type="number" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" id="<?php echo(self::INPUT_FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::NAME_OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
 					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>
@@ -219,7 +222,7 @@ if (!class_exists('PostponePosts')) {
 					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.', self::ID)); ?>"><?php
 
 					foreach ($thePosts as $post) {
-						$postUpdate = self::getUpdatePost($post, get_option(self::OPTION_DAYS));
+						$postUpdate = self::getUpdatePost($post, get_option(self::NAME_OPTION_DAYS));
 						echo(sprintf("%s -> %s: \"%s\"\n", self::formatDateShort($post->post_date), self::formatDateShort($postUpdate['post_date']), $post->post_title));
 					}
 
@@ -485,8 +488,8 @@ if (!class_exists('PostponePosts')) {
 		public static function initSettings() {
 
 			register_setting(
-					self::OPTION_GROUP,
-					self::OPTION_DAYS,
+					self::ID_OPTION_GROUP,
+					self::NAME_OPTION_DAYS,
 					[
 							'type' => 'integer',
 							'description' => __('Number of days to postpone', self::ID),
@@ -496,20 +499,22 @@ if (!class_exists('PostponePosts')) {
 			);
 
 			add_settings_section(
-					'postpone_posts_section_days', // section id
+					self::ID_SETTINGS_SECTION_DAYS, // section id
 					__('Basic configuration', self::ID), // title
 					'PostponePosts::showSettingsSectionDays', // function to display settings section
-					self::OPTION_GROUP // option group id
+					self::ID_OPTION_GROUP // option group id
 			);
 
 			add_settings_field(
-					self::OPTION_DAYS, // field id (only used internally)
+					self::ID_SETTINGS_FIELD_DAYS, // field id (only used internally)
 					__('Days to postpone', self::ID), // title
 					'PostponePosts::showSettingsFieldDays', // function to display field input form
-					self::OPTION_GROUP, // option group id
-					'postpone_posts_section_days', // section id
+					self::ID_OPTION_GROUP, // option group id
+					self::ID_SETTINGS_SECTION_DAYS, // section id
 					[
-						'label_for' => self::OPTION_DAYS, // params
+						'label_for' => self::NAME_OPTION_DAYS, // params
+						'min_value' => self::DAYS_MIN,
+						'max_value' => self::DAYS_MAX,
 					]
 			);
 
@@ -525,7 +530,7 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
-				<p id="<?php echo esc_attr($args['id']); ?>"><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
+				<p><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
 
 			<?php
 
@@ -538,15 +543,16 @@ if (!class_exists('PostponePosts')) {
 		 */
 		public static function showSettingsFieldDays($args) {
 
-			$options = array($args['label_for'] => get_option($args['label_for']));
+			$settingNumberOfDays = get_option($args['label_for']);
 
 			?>
 
 				<input type="number"
-					id="<?php echo esc_attr($args['label_for']); ?>"
-					name="<?php echo esc_attr(self::OPTION_DAYS); ?>[<?php echo esc_attr($args['label_for']); ?>]"
-					min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>"
-					value="<?php echo(isset($options[$args['label_for']]) ? $options[$args['label_for']] : 0); ?>"
+					id="<?php echo(esc_attr($args['label_for'])); ?>"
+					name="<?php echo(esc_attr($args['label_for'])); ?>"
+					min="<?php echo(esc_attr($args['min_value'])); ?>"
+					max="<?php echo(esc_attr($args['max_value'])); ?>"
+					value="<?php echo(esc_attr(get_option($args['label_for']))); ?>"
 					autofocus="autofocus"
 				/>
 
@@ -582,20 +588,11 @@ if (!class_exists('PostponePosts')) {
 				return;
 			}
 
-			// check if the user have submitted the settings
-			// wordpress will add the "settings-updated" $_GET parameter to the url
-			if (isset($_GET['settings-updated'])) {
-				add_settings_error('popopo_messages', 'wporg_message', __('Settings Saved', self::ID), 'updated');
-			}
-
-			// show error/update messages
-			settings_errors('popopo_messages');
-
 			?>
 
 				<div class="wrap">
 
-					<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+					<h1><?php echo(esc_html(get_admin_page_title())); ?></h1>
 
 					<form action="options.php" method="post">
 
@@ -603,9 +600,10 @@ if (!class_exists('PostponePosts')) {
 
 						// output security fields for the registered setting
 						settings_fields('postpone_posts');
+
 						// output setting sections and their fields
 						do_settings_sections('postpone_posts');
-						// output save settings button
+
 						submit_button('Save Settings');
 
 					?>

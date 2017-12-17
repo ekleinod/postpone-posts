@@ -437,7 +437,7 @@ if (!class_exists('PostponePosts')) {
 		private static function formatDateShort($theDate) {
 
 			$postDate = new DateTime($theDate);
-			return $postDate->format("Y-m-d");
+			return date_i18n(get_option('date_format'), $postDate->getTimestamp());
 
 		}
 

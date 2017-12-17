@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- settings page for setting default value of days to postpone
+
 ### Changed
+
+- formatting error messages correctly
+- specific error messages for invalid values
 
 ### Deprecated
 
@@ -19,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - link to readme.txt in readme.md
 - typos and layout of readme.txt
+- minor bug in input field for days (max/min value and id)
 
 ### Security
 

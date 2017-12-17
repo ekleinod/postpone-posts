@@ -154,8 +154,8 @@ if (!class_exists('PostponePosts')) {
 
 				if ((count($futurePosts) > 0) && isset($_GET[self::INPUT_FIELD_DAYS])) {
 
-					$popoDays = $_GET[self::INPUT_FIELD_DAYS];
-					if (self::checkDays($popoDays)) {
+					$popopoDays = $_GET[self::INPUT_FIELD_DAYS];
+					if (self::checkDays($popopoDays)) {
 
 						// trigger actions depending on sending form
 						if (isset($_GET[self::ACTION_POSTPONE])) {
@@ -175,8 +175,13 @@ if (!class_exists('PostponePosts')) {
 
 					} else {
 
-							self::printError(sprintf(__('Wrong number of days to postpone: %s', self::ID), $popoDays));
-							self::showDaysInputPage($futurePosts);
+						foreach (get_settings_errors(self::ID_SETTINGS_FIELD_DAYS) as $error) {
+
+							self::printError($error['message']);
+
+						}
+
+						self::showDaysInputPage($futurePosts);
 
 					}
 
@@ -445,7 +450,13 @@ if (!class_exists('PostponePosts')) {
 		 */
 		private static function printError($theMessage) {
 
-			echo(sprintf("<p>Error: %s.</p>\n", $theMessage));
+			?>
+
+				<div class="error notice">
+					<p><?php echo(esc_html($theMessage)); ?></p>
+				</div>
+
+			<?php
 
 		}
 

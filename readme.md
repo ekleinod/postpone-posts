@@ -15,11 +15,10 @@ All development files reside in the folder "dev".
 Short details about the structure of the git repository:
 The branches are constructed regarding the git branching model of http://nvie.com/posts/a-successful-git-branching-model/
 
-This means, there are always at least three branches:
+This means, there are always at least two branches:
 
 1. `master` - contains released versions
 2. `develop` - main synchronisation branch for feature, release, and hotfix branches
-3. `feature/work` - main working branch for development
 
 Additionally, the following branches my occur:
 

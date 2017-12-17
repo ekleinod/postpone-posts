@@ -3,7 +3,7 @@
 Plugin Name: Postpone Posts
 Plugin URI; https://github.com/ekleinod/postpone-posts
 Description: Postpones all future (planned) posts by a selectable number of days.
-Version: 0.1.0
+Version: 0.2.0
 Author: Ekkart Kleinod
 Author URI: http://www.edgesoft.de/
 License: GPL-3.0

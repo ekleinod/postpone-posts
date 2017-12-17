@@ -5,7 +5,7 @@ Tags: post, schedule
 Requires at least: 3.0.1
 Tested up to: 4.9.1
 Requires PHP: 5.2.4
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,12 +38,19 @@ No, currently there is no selection of posts to postpone.
 
 == Screenshots ==
 
-1. Start page: set number of days to postpone
-2. Preview page: check consequences
-3. Result page: see a summary of the postpone result
+1. Start page: set number of days to postpone.
+2. Preview page: check consequences.
+3. Result page: see a summary of the postpone result.
+4. Settings page.
 
 
 == Changelog ==
+
+= 0.2.0 =
+
+* settings page for default number of days to postpone
+* improved error messages
+* consolidated texts and titles
 
 = 0.1.0 =
 
@@ -54,6 +61,10 @@ No, currently there is no selection of posts to postpone.
 
 == Upgrade Notice ==
 
+= 0.2.0 =
+
+* no special upgrade procedure needed
+
 = 0.1.0 =
 
 * first version, no upgrade possible
@@ -61,10 +72,15 @@ No, currently there is no selection of posts to postpone.
 
 == ToDo ==
 
+This is a collection of things to do, I will implement them as I see fit and as my time allows.
+If you want to help, please use github for conversation, issue tracking, or pull requests.
+
+<https://github.com/ekleinod/postpone-posts>
+
 = Functionality =
 
 * selection of posts to postpone
-* option page for setting default postpone days
+* option page for setting min/max value of postpone days
 
 = User Experience =
 
@@ -75,12 +91,10 @@ No, currently there is no selection of posts to postpone.
 
 = Hardening =
 
-* check for false input in days field
 * concept for rights for postponing
 	* can only users postpone their own posts?
 	* can admin postpone all posts?
 
 = Technics =
 
-* use WP functions
-	* error handling and display
+* use WP functions for displaying special texts

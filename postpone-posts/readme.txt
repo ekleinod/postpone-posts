@@ -72,8 +72,7 @@ No, currently there is no selection of posts to postpone.
 
 == ToDo ==
 
-This is a collection of things to do, I will implement them as I see fit and as my time allows.
-If you want to help, please use github for conversation, issue tracking, or pull requests.
+This is a collection of things to do, I will implement them as I see fit and as my time allows. If you want to help, please use github for conversation, issue tracking, or pull requests.
 
 <https://github.com/ekleinod/postpone-posts>
 

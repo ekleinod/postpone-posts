@@ -1,0 +1,103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Postpone-Posts\n"
+"POT-Creation-Date: 2017-12-17 23:30+0100\n"
+"PO-Revision-Date: 2017-12-17 23:41+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __\n"
+"Last-Translator: Ekkart Kleinod <ekleinod@edgesoft.de>\n"
+"Language: de\n"
+"X-Poedit-SearchPath-0: postpone-posts.php\n"
+
+#: postpone-posts.php:123
+msgid "Overview"
+msgstr ""
+
+#: postpone-posts.php:124
+#, php-format
+msgid ""
+"You can postpone all future posts shown in the box by the given number of "
+"days. The number of days has to be between %d and %d."
+msgstr ""
+
+#: postpone-posts.php:171
+msgid "Unrecognized action."
+msgstr ""
+
+#: postpone-posts.php:217
+msgid ""
+"You can postpone all future posts shown in the box by the given number of "
+"days."
+msgstr ""
+"Sie können alle zukünftigen Posts (siehe Box) um die Anzahl der Tage "
+"verschieben."
+
+#: postpone-posts.php:219
+msgid "Postpone settings"
+msgstr ""
+
+#: postpone-posts.php:222
+msgid "Days to postpone:"
+msgstr ""
+
+#: postpone-posts.php:226
+msgid "Affected posts (display only)"
+msgstr ""
+
+#: postpone-posts.php:228
+msgid "No posts to postpone."
+msgstr ""
+
+#: postpone-posts.php:270
+msgid ""
+"Start postponing by clicking \"Postpone Posts\". You can cancel the "
+"operation by clicking \"Cancel\"."
+msgstr ""
+
+#: postpone-posts.php:272
+msgid "Preview"
+msgstr ""
+
+#: postpone-posts.php:479
+msgid "Basic configuration"
+msgstr ""
+
+#: postpone-posts.php:486
+msgid "Days to postpone"
+msgstr ""
+
+#: postpone-posts.php:496
+msgid ""
+"Default number of days to postpone. Can be overriden for each postponing "
+"operation."
+msgstr ""
+
+#: postpone-posts.php:512
+msgid "Set the default number of days to postpone in this section."
+msgstr ""
+
+#: postpone-posts.php:573
+#, php-format
+msgid "%s postpones all future (planned) posts by a selectable number of days."
+msgstr ""
+
+#: postpone-posts.php:638
+#, php-format
+msgid "\"%s\" is no numeric value."
+msgstr ""
+
+#: postpone-posts.php:648
+#, php-format
+msgid "\"%d\" is smaller than the minimal number of days (%d)."
+msgstr ""
+
+#: postpone-posts.php:658
+#, php-format
+msgid "\"%d\" is larger than the maximal number of days (%d)."
+msgstr ""

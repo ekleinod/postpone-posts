@@ -1,0 +1,163 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Postpone-Posts\n"
+"POT-Creation-Date: 2017-12-19 00:27+0100\n"
+"PO-Revision-Date: 2017-12-19 00:36+0100\n"
+"Last-Translator: Ekkart Kleinod <ekleinod@edgesoft.de>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;esc_html__;_n:1,2\n"
+"X-Poedit-SearchPath-0: postpone-posts.php\n"
+
+#: postpone-posts.php:125
+msgid "Overview"
+msgstr "Überblick"
+
+#: postpone-posts.php:126
+#, php-format
+msgid ""
+"You can postpone all future posts shown in the box by the given number of "
+"days. The number of days has to be between %d and %d."
+msgstr ""
+"Sie können alle zukünftigen Beiträge (siehe Box) um die Anzahl der Tage "
+"verschieben. Die Anzahl der Tage muss zwischen %d und %d liegen."
+
+#: postpone-posts.php:175
+msgid "Unrecognized action."
+msgstr "Unbekannte Aktion."
+
+#: postpone-posts.php:221
+msgid ""
+"You can postpone all future posts shown in the box by the given number of "
+"days."
+msgstr ""
+"Sie können alle zukünftigen Posts (siehe Box) um die Anzahl der Tage "
+"verschieben."
+
+#: postpone-posts.php:223
+msgid "Postpone settings"
+msgstr "Einstellungen für das Verschieben"
+
+#: postpone-posts.php:226 postpone-posts.php:278 postpone-posts.php:518
+msgid "Days to postpone"
+msgstr "Anzahl der Tage"
+
+#: postpone-posts.php:230
+msgid "Affected posts (display only)"
+msgstr "Betroffene Beiträge (reine Anzeige)"
+
+#: postpone-posts.php:232
+msgid "No posts to postpone."
+msgstr "Keine Beiträge zum Verschieben."
+
+#: postpone-posts.php:247
+msgid "Preview Postponing"
+msgstr "Vorschau des Verschiebens"
+
+#: postpone-posts.php:274
+msgid ""
+"Start postponing by clicking \"Postpone Posts\". You can cancel the "
+"operation by clicking \"Cancel\"."
+msgstr ""
+"Starten Sie das Verschieben durch Anklicken von \"Beiträge verschieben\". "
+"Sie können den Vorgang durch Anklicken von \"Abbrechen\" abbrechen."
+
+#: postpone-posts.php:276
+msgid "Preview"
+msgstr "Vorschau"
+
+#: postpone-posts.php:283 postpone-posts.php:290
+msgid "Date"
+msgstr "Datum"
+
+#: postpone-posts.php:284 postpone-posts.php:291
+msgid "Postpone to"
+msgstr "Verschieben nach"
+
+#: postpone-posts.php:285 postpone-posts.php:292
+msgid "Title"
+msgstr "Titel"
+
+#: postpone-posts.php:326
+msgid "Postpone Posts"
+msgstr "Beiträge verschieben"
+
+#: postpone-posts.php:337
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: postpone-posts.php:382
+#, php-format
+msgid "Postponing from %s (GMT: %s) to %s (GMT: %s) for %s - %s"
+msgstr "Verschiebe vom %s (GMT: %s) auf den %s (GMT: %s) für %s - %s"
+
+#: postpone-posts.php:400
+msgid "Finished postponing:"
+msgstr "Verschieben beendet:"
+
+#: postpone-posts.php:402
+#, php-format
+msgid "%d successfully postponed post and"
+msgid_plural "%d successfully postponed posts and"
+msgstr[0] "%d Beitrag erfolgreich verschoben bei"
+msgstr[1] "%d Beiträge erfolgreich verschoben bei"
+
+#: postpone-posts.php:409
+#, php-format
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] "%d Fehler"
+msgstr[1] "%d Fehlern"
+
+#: postpone-posts.php:511
+msgid "Basic configuration"
+msgstr "Grundeinstellungen"
+
+#: postpone-posts.php:528
+msgid ""
+"Default number of days to postpone. Can be overriden for each postponing "
+"operation."
+msgstr ""
+"Voreingestellte Anzahl der Tage zum Verschieben. Kann bei jedem Verschieben "
+"überschrieben werden."
+
+#: postpone-posts.php:544
+msgid "Set the default number of days to postpone in this section."
+msgstr "Setzen Sie die Voreinstellung für die Tage in diesem Abschnitt."
+
+#: postpone-posts.php:605
+#, php-format
+msgid "%s postpones all future (planned) posts by a selectable number of days."
+msgstr ""
+"%s verschiebt alle zukünftigen (geplanten) Beiträge um eine einstellbare "
+"Anzahl von Tagen."
+
+#: postpone-posts.php:670
+#, php-format
+msgid "\"%s\" is no numeric value."
+msgstr "\"%s\" ist keine Zahl."
+
+#: postpone-posts.php:680
+#, php-format
+msgid "\"%d\" is smaller than the minimal number of days (%d)."
+msgstr "\"%d\" ist kleiner als die minimale Anzahl von Tagen (%d)."
+
+#: postpone-posts.php:690
+#, php-format
+msgid "\"%d\" is larger than the maximal number of days (%d)."
+msgstr "\"%d\" ist größer als die maximale Anzahl von Tagen (%d)."
+
+#~ msgid ""
+#~ "Finished postponing with %d successfully postponed posts and %d errors."
+#~ msgstr ""
+#~ "Verschieben mit %d erfolgreich verschobenen Beiträgen und %d Fehlern "
+#~ "beendet."
+
+#~ msgid "Days to postpone:"
+#~ msgstr "Anzahl der Tage:"

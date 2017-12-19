@@ -8,6 +8,8 @@ Author: Ekkart Kleinod
 Author URI: http://www.edgesoft.de/
 License: GPL-3.0
 License URI: https://opensource.org/licenses/GPL-3.0
+Text Domain: postpone-posts
+Domain Path: /languages
 
 Postpone Posts is a wordpress plugin that postpones all future (planned) posts by a selectable number of days.
 Copyright (C) 2017 Ekkart Kleinod
@@ -120,8 +122,10 @@ if (!class_exists('PostponePosts')) {
 
 			get_current_screen()->add_help_tab(array(
 				'id'      => 'overview',
-				'title'   => __('Overview', self::ID),
-				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.', self::ID), self::DAYS_MIN, self::DAYS_MAX)),
+				'title'   => __('Overview', 'postpone-posts'),
+				'content' => sprintf('<p>%s</p>', sprintf(__('You can postpone all future posts shown in the box by the given number of days. The number of days has to be between %d and %d.', 'postpone-posts'),
+																									number_format_i18n(self::DAYS_MIN),
+																									number_format_i18n(self::DAYS_MAX))),
 			));
 
 		}
@@ -168,7 +172,7 @@ if (!class_exists('PostponePosts')) {
 
 						} else {
 
-							self::printError(__('Unrecognized action.', self::ID));
+							self::printError(__('Unrecognized action.', 'postpone-posts'));
 							self::showDaysInputPage($futurePosts);
 
 						}
@@ -214,18 +218,18 @@ if (!class_exists('PostponePosts')) {
 
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 
-					<p><?php echo(__('You can postpone all future posts shown in the box by the given number of days.', self::ID)) ?></p>
+					<p><?php echo(esc_html__('You can postpone all future posts shown in the box by the given number of days.', 'postpone-posts')) ?></p>
 
-					<h2><?php echo(__('Postpone settings', self::ID)); ?></h2>
+					<h2><?php echo(esc_html__('Postpone settings', 'postpone-posts')); ?></h2>
 
 					<p>
-						<label for="<?php echo(self::INPUT_FIELD_DAYS); ?>" class="label-responsive"><?php echo(__('Days to postpone:', self::ID)); ?></label>
+						<label for="<?php echo(self::INPUT_FIELD_DAYS); ?>" class="label-responsive"><?php echo(esc_html__('Days to postpone', 'postpone-posts')); ?>:</label>
 						<input type="number" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" id="<?php echo(self::INPUT_FIELD_DAYS); ?>" min="<?php echo(self::DAYS_MIN); ?>" max="<?php echo(self::DAYS_MAX); ?>" value="<?php echo(get_option(self::NAME_OPTION_DAYS)); ?>" autofocus="autofocus" />
 					</p>
 
-					<h2><?php echo(__('Affected posts (display only)', self::ID)); ?></h2>
+					<h2><?php echo(esc_html__('Affected posts (display only)', 'postpone-posts')); ?></h2>
 
-					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(__('No posts to postpone.', self::ID)); ?>"><?php
+					<textarea rows="5" cols="60" disabled="disabled" readonly="readonly" placeholder="<?php echo(esc_html__('No posts to postpone.', 'postpone-posts')); ?>"><?php
 
 					foreach ($thePosts as $post) {
 						$postUpdate = self::getUpdatePost($post, get_option(self::NAME_OPTION_DAYS));
@@ -240,7 +244,7 @@ if (!class_exists('PostponePosts')) {
 						if (count($thePosts) <= 0) {
 							$submit_args['disabled'] = 'disabled';
 						}
-						submit_button('Preview Postponing', 'primary large', self::ACTION_PREVIEW, true, $submit_args);
+						submit_button(esc_html__('Preview Postponing', 'postpone-posts'), 'primary large', self::ACTION_PREVIEW, true, $submit_args);
 
 					?>
 
@@ -267,25 +271,25 @@ if (!class_exists('PostponePosts')) {
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 					<input type="hidden" name="<?php echo(self::INPUT_FIELD_DAYS); ?>" value="<?php echo($theInput); ?>" />
 
-					<p><?php echo(__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', self::ID)) ?></p>
+					<p><?php echo(esc_html__('Start postponing by clicking "Postpone Posts". You can cancel the operation by clicking "Cancel".', 'postpone-posts')) ?></p>
 
-					<h2><?php echo(__('Preview', self::ID)); ?></h2>
+					<h2><?php echo(esc_html__('Preview', 'postpone-posts')); ?></h2>
 
-					<p>Days to postpone: <?php echo($theInput); ?></p>
+					<p><?php echo(esc_html__('Days to postpone', 'postpone-posts')); ?>: <?php echo($theInput); ?></p>
 
 					<table>
 						<thead>
 							<tr>
-								<th>Date</th>
-								<th>Postpone to</th>
-								<th>Title</th>
+								<th><?php echo(esc_html__('Date', 'postpone-posts')); ?></th>
+								<th><?php echo(esc_html__('Postpone to', 'postpone-posts')); ?></th>
+								<th><?php echo(esc_html__('Title', 'postpone-posts')); ?></th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
-								<th>Date</th>
-								<th>Postpone to</th>
-								<th>Title</th>
+								<th><?php echo(esc_html__('Date', 'postpone-posts')); ?></th>
+								<th><?php echo(esc_html__('Postpone to', 'postpone-posts')); ?></th>
+								<th><?php echo(esc_html__('Title', 'postpone-posts')); ?></th>
 							</tr>
 						</tfoot>
 						<tbody>
@@ -319,7 +323,7 @@ if (!class_exists('PostponePosts')) {
 						if (count($thePosts) < 1) {
 							$submit_args['disabled'] = 'disabled';
 						}
-						submit_button('Postpone Posts', 'primary large', self::ACTION_POSTPONE, true, $submit_args);
+						submit_button(esc_html__('Postpone Posts', 'postpone-posts'), 'primary large', self::ACTION_POSTPONE, true, $submit_args);
 
 					?>
 
@@ -330,7 +334,7 @@ if (!class_exists('PostponePosts')) {
 					<input type="hidden" name="page" value="<?php echo($plugin_page); ?>" />
 
 					<?php
-						submit_button('Cancel', 'secondary large', self::ACTION_CANCEL);
+						submit_button(esc_html__('Cancel', 'postpone-posts'), 'secondary large', self::ACTION_CANCEL);
 					?>
 				</form>
 
@@ -346,43 +350,71 @@ if (!class_exists('PostponePosts')) {
 		 */
 		private static function showActionPage($thePosts, $theInput) {
 
-			echo('<ul>');
+			?>
 
-			$count_success = 0;
-			$count_error = 0;
+				<ul>
 
-			foreach ($thePosts as $post) {
+				<?php
 
-				$postUpdate = self::getUpdatePost($post, $theInput);
+					$count_success = 0;
+					$count_error = 0;
 
-				$post_id =  wp_update_post($postUpdate, true);
+					foreach ($thePosts as $post) {
 
-				if (!is_wp_error($post_id)) {
+						$postUpdate = self::getUpdatePost($post, $theInput);
 
-					$message = '&check;';
-					$count_success++;
+						$post_id =  wp_update_post($postUpdate, true);
 
-				} else {
+						if (!is_wp_error($post_id)) {
 
-					$message = sprintf('&cross;: %s', implode('.', $post_id->get_error_messages()));
-					$count_error++;
+							$message = '&check;';
+							$count_success++;
 
-				}
+						} else {
 
-				echo(sprintf("<li>Postponing from %s (GMT: %s) to %s (GMT: %s) for %s - %s</li>\n",
-						 self::formatDateShort($post->post_date),
-						 self::formatDateShort($post->post_date_gmt),
-						 self::formatDateShort($postUpdate['post_date']),
-						 self::formatDateShort($postUpdate['post_date_gmt']),
-						 $post->post_title,
-						 $message
-				));
+							$message = sprintf('&cross;: %s', implode('.', $post_id->get_error_messages()));
+							$count_error++;
 
-			}
+						}
 
-			echo('</ul>');
+						?>
 
-			echo(sprintf("<p>Finished postponing with %d successfully postponed posts and %d errors.</p>\n", $count_success, $count_error));
+							<li><?php echo(sprintf(esc_html__('Postponing from %s (GMT: %s) to %s (GMT: %s) for %s - %s', 'postpone-posts'),
+									 self::formatDateShort($post->post_date),
+									 self::formatDateShort($post->post_date_gmt),
+									 self::formatDateShort($postUpdate['post_date']),
+									 self::formatDateShort($postUpdate['post_date_gmt']),
+									 $post->post_title,
+									 $message
+							)); ?></li>
+
+						<?php
+
+					}
+
+				?>
+
+				</ul>
+
+				<p>
+					<?php echo(esc_html__('Finished postponing:', 'postpone-posts')); ?>
+					<?php echo(sprintf(_n(
+																'%d successfully postponed post and',
+																'%d successfully postponed posts and',
+																$count_success,
+																'postpone-posts'
+																),
+														 number_format_i18n($count_success))); ?>
+					<?php echo(sprintf(_n(
+																'%d error',
+																'%d errors',
+																$count_error,
+																'postpone-posts'
+																),
+														 number_format_i18n($count_error))); ?>
+				</p>
+
+			<?php
 
 		}
 
@@ -437,7 +469,7 @@ if (!class_exists('PostponePosts')) {
 		private static function formatDateShort($theDate) {
 
 			$postDate = new DateTime($theDate);
-			return $postDate->format("Y-m-d");
+			return date_i18n(get_option('date_format'), $postDate->getTimestamp());
 
 		}
 
@@ -476,14 +508,14 @@ if (!class_exists('PostponePosts')) {
 
 			add_settings_section(
 					self::ID_SETTINGS_SECTION_DAYS, // section id
-					__('Basic configuration', self::ID), // title
+					__('Basic configuration', 'postpone-posts'), // title
 					'PostponePosts::showSettingsSectionDays', // function to display settings section
 					self::ID_SETTING_GROUP // option group id
 			);
 
 			add_settings_field(
 					self::ID_SETTINGS_FIELD_DAYS, // field id (only used internally)
-					__('Days to postpone', self::ID), // title
+					__('Days to postpone', 'postpone-posts'), // title
 					'PostponePosts::showSettingsFieldDays', // function to display field input form
 					self::ID_SETTING_GROUP, // option group id
 					self::ID_SETTINGS_SECTION_DAYS, // section id
@@ -493,7 +525,7 @@ if (!class_exists('PostponePosts')) {
 						'min_value' => self::DAYS_MIN,
 						'max_value' => self::DAYS_MAX,
 						'default_value' => self::OPTION_DAYS_DEFAULT,
-						'description' => __('Default number of days to postpone. Can be overriden for each postponing operation.', self::ID)
+						'description' => __('Default number of days to postpone. Can be overriden for each postponing operation.', 'postpone-posts')
 					]
 			);
 
@@ -509,7 +541,7 @@ if (!class_exists('PostponePosts')) {
 
 			?>
 
-				<p><?php echo(__('Set the default number of days to postpone in this section.', self::ID)); ?></p>
+				<p><?php echo(esc_html__('Set the default number of days to postpone in this section.', 'postpone-posts')); ?></p>
 
 			<?php
 
@@ -570,7 +602,7 @@ if (!class_exists('PostponePosts')) {
 
 					<h1><?php echo(esc_html(get_admin_page_title())); ?></h1>
 
-					<p><?php echo(sprintf(__('%s postpones all future (planned) posts by a selectable number of days.'), self::PLUGIN_NAME)); ?></p>
+					<p><?php echo(sprintf(esc_html__('%s postpones all future (planned) posts by a selectable number of days.', 'postpone-posts'), self::PLUGIN_NAME)); ?></p>
 
 					<form action="options.php" method="post">
 
@@ -635,7 +667,7 @@ if (!class_exists('PostponePosts')) {
 				add_settings_error(
 						self::ID_SETTINGS_FIELD_DAYS,
 						self::ID_SETTINGS_FIELD_DAYS,
-						sprintf(__('"%s" is no numeric value.', self::ID), $theInput)
+						sprintf(esc_html__('"%s" is no numeric value.', 'postpone-posts'), $theInput)
 				);
 				return false;
 			}
@@ -645,7 +677,7 @@ if (!class_exists('PostponePosts')) {
 				add_settings_error(
 						self::ID_SETTINGS_FIELD_DAYS,
 						self::ID_SETTINGS_FIELD_DAYS,
-						sprintf(__('"%d" is smaller than the minimal number of days (%d).', self::ID), $theInput, self::DAYS_MIN)
+						sprintf(esc_html__('"%d" is smaller than the minimal number of days (%d).', 'postpone-posts'), number_format_i18n($theInput), number_format_i18n(self::DAYS_MIN))
 				);
 				return false;
 			}
@@ -655,7 +687,7 @@ if (!class_exists('PostponePosts')) {
 				add_settings_error(
 						self::ID_SETTINGS_FIELD_DAYS,
 						self::ID_SETTINGS_FIELD_DAYS,
-						sprintf(__('"%d" is larger than the maximal number of days (%d).', self::ID), $theInput, self::DAYS_MAX)
+						sprintf(esc_html__('"%d" is larger than the maximal number of days (%d).', 'postpone-posts'), number_format_i18n($theInput), number_format_i18n(self::DAYS_MAX))
 				);
 				return false;
 			}
@@ -663,6 +695,13 @@ if (!class_exists('PostponePosts')) {
 			// valid input
 			return true;
 
+		}
+
+		/**
+		 * Load plugin textdomain.
+		 */
+		function loadTextdomain() {
+			load_plugin_textdomain('postpone-posts', false, dirname(plugin_basename(__FILE__)) . '/languages');
 		}
 
 	} // end of class PostponePosts
@@ -676,6 +715,8 @@ if (!class_exists('PostponePosts')) {
 
 	add_action('admin_menu', 'PostponePosts::addToolsPage');
 	add_action('admin_menu', 'PostponePosts::addOptionsPage');
+
+	add_action('plugins_loaded', 'PostponePosts::loadTextdomain');
 
 	add_filter('contextual_help', 'PostponePosts::addContextHelp', 5, 3);
 

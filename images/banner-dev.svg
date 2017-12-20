@@ -17,9 +17,9 @@
    id="svg8"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="banner-dev.svg"
-   inkscape:export-filename="D:\working\git\postpone-posts\images\banner-772x250.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-filename="D:\working\git\postpone-posts\images\banner-1544x500.png"
+   inkscape:export-xdpi="191.99997"
+   inkscape:export-ydpi="191.99997">
   <defs
      id="defs2">
     <marker
@@ -1471,10 +1471,11 @@
   </g>
   <g
      style="display:inline"
-     inkscape:label="stamp"
+     inkscape:label="banner"
      id="g1388"
      inkscape:groupmode="layer"
-     transform="translate(0,32.279167)">
+     transform="translate(0,32.279167)"
+     sodipodi:insensitive="true">
     <g
        id="g902"
        transform="translate(3.2485882,0.54848886)">

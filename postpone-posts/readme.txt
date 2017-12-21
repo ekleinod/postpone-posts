@@ -5,7 +5,7 @@ Tags: post, schedule
 Requires at least: 3.0.1
 Tested up to: 4.9.1
 Requires PHP: 5.2.4
-Stable tag: 0.2.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,28 +46,19 @@ No, you can only postpone all planned posts.
 
 == Changelog ==
 
-= 0.2.0 =
+= 1.0.0 =
 
-* settings page for default number of days to postpone
-* improved error messages
-* consolidated texts and titles
-
-= 0.1.0 =
-
-* first version of the plugin
+* first stable version
 * basic functionality
+* settings page for default number of days to postpone
+* localization and internationalization
+* banner and icon
 * not tested against misuse concerning roles, capabilities etc. (see ToDo)
 
 
 == Upgrade Notice ==
 
-= 0.2.0 =
-
-* no special upgrade procedure needed
-
-= 0.1.0 =
-
-* first version, no upgrade possible
+= 1.0.0 =
 
 
 == ToDo ==
@@ -85,7 +76,6 @@ This is a collection of things to do, I will implement them as I see fit and as 
 
 * nicer preview of postpone dates and posts on start page
 * interactive preview of postpone dates and posts on start page
-* localization
 * better context help
 
 = Hardening =
@@ -93,7 +83,3 @@ This is a collection of things to do, I will implement them as I see fit and as 
 * concept for rights for postponing
 	* can only users postpone their own posts?
 	* can admin postpone all posts?
-
-= Technics =
-
-* use WP functions for displaying special texts

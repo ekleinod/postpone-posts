@@ -14,7 +14,7 @@ Postpones all future (planned) posts by a selectable number of days.
 
 == Description ==
 
-Imagine you wrote a lot of planned posts that will be published in the future. Now an event occurs that forces you to react for one or more days. Either there are overlapping posts or you have to postpone (i.e. reschedule) all your future posts.
+Imagine you wrote a lot of posts that you planned to publish in the future. Now an event occurs that forces you to change your plans. Either there are overlapping posts or you have to postpone (i.e. reschedule) all your future posts.
 
 This is where *Postpone Posts* comes in handy. It takes all planned posts and postpones them by a selectable number of days.
 
@@ -33,7 +33,7 @@ Postponing can only be done by users with edit capabilities.
 
 = Can I postpone just some posts? =
 
-No, currently there is no selection of posts to postpone.
+No, you can only postpone all planned posts.
 
 
 == Screenshots ==

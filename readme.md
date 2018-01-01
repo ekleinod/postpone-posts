@@ -2,6 +2,8 @@
 
 This project contains all files for the postpone posts plugin for wordpress.
 
+- [Wordpress-Plugin-Page](https://wordpress.org/plugins/postpone-posts/)
+
 See readme.txt in plugin directory for more information.
 
 - [readme.txt](postpone-posts/readme.txt)
